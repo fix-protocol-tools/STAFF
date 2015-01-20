@@ -1,0 +1,6 @@
+20121210-12:34:26: Session FIX.4.4:TRGT->SNDR schedule is daily, 00:00:01-UTC - 23:59:00-UTC
+20121210-12:34:26: Created session: FIX.4.4:TRGT->SNDR
+20121210-12:34:29: Accepting session FIX.4.4:TRGT->SNDR from /127.0.0.1:57714
+20121210-12:34:29: Acceptor heartbeat set to 30 seconds
+20121210-12:34:29: Received logon
+20121210-12:34:29: Responding to logon request

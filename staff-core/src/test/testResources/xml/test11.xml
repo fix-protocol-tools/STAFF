@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<project name="receive_custom_tag_existent.xml" default="all">
+  <dirname property="test.base.dir" file="${ant.file}" />
+  <import file="fix_common.xml" />
+  <taskdef resource="net/sf/antcontrib/antlib.xml" />
+
+<!-- ================================================= -->
+<target name="all" depends="clean, run_all, test, clean_all">
+</target>
+<!-- ================================================= -->
+
+<target name="clean">
+	<echo>Clearning log files...</echo>
+	<delete dir="${test.log.dir}" failonerror="false" />
+	<echo>Done</echo>
+</target>
+
+<!-- ================================================= -->
+<target name="run_all" >
+	<mkdir dir="${test.log.dir}" />
+
+	<echo>Creating FIX Initiator...</echo>
+	<fixInitiator settingsfile="${test.base.dir}/settings/FIXInitiator.properties" id="main_initiator" />
+	<fixStart refid="main_initiator" />
+	<sleep seconds="1" />
+
+	<echo>Creating FIX Aceptor...</echo>
+	<fixAcceptor settingsfile="${test.base.dir}/settings/FIXAcceptor.properties" id="main_acceptor" />
+	<fixStart refid="main_acceptor" />
+	<sleep seconds="1" />
+</target>
+<!-- ================================================= -->
+
+<target name="clean_all">
+    <echo>Stopping FIX Initiator...</echo>
+	<fixStop refid="main_initiator" />
+    <sleep seconds="1" />
+    <echo>Stopping FIX Acceptor...</echo>
+	<fixStop refid="main_acceptor" />
+    <sleep seconds="1" />
+</target>
+
+<!-- ================================================= -->
+
+<!-- ================================================= -->
+
+<target name="test">
+
+<description>
+1) Send standard fix tag in the message body of the message, for which the tag is not specified
+</description>
+
+    <fixWaitForLogin refid="main_initiator" timeout="30"/>
+
+	<echo>Send Email  (MsgType = C) message from initiator to acceptor</echo>
+	<java classname="Timestamp" outputproperty="UniqueID" fork="false" />
+
+	<fixSend refid="main_initiator"
+                 repeat="1" count="1" repeatDelay="0" sendDelay="0"
+                 validateOutgoing="false">
+		<fixMessage >
+            <field name="MsgType" value="C" />
+            <!--<field name="55" value="TESTSYMBOL" />-->
+            <field name="164" value="123456" />
+			<field name="EmailType" value="0" />
+			<field name="Subject" value="Test e-mail" />
+            <group name="LinesOfText">
+                 <field name="Text" value="Line 2" />
+            </group>
+            <group name="LinesOfText">
+                 <field name="Text" value="Line 1" />
+            </group>
+        </fixMessage>
+	</fixSend>
+
+	<fixReceive refid="main_acceptor" timeout="10"
+                repeat="1" count="1"
+	            validateIncoming="false"
+                strictOrdering="true">
+		<fixMessage>
+            <field name="MsgType" value="C" />
+            <!--<field name="55" value="TESTSYMBOL" />-->
+            <field name="164" value="123456" />
+			<field name="EmailType" value="0" />
+			<field name="Subject" value="Test e-mail" />
+            <group name="LinesOfText">
+                 <field name="Text" value="Line 1" />
+            </group>
+            <group name="LinesOfText">
+                 <field name="Text" value="Line 2" />
+            </group>
+        </fixMessage>
+	</fixReceive>  
+</target>
+
+</project>

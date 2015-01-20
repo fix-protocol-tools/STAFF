@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<project name="fix_check_num_in_group_in_group_fix40.xml" default="all">
+	<dirname property="test.base.dir" file="${ant.file}" />
+	<import file="fix_common.xml" />
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
+
+<!-- ========================================================== -->
+<target name="all" depends="run_all, test, clean_all">
+</target>
+<!-- Clean logs and run all components ======================== -->
+	<target name="run_all">
+		<echo>Clearning log files...</echo>
+		<delete dir="${test.log.dir}" failonerror="false" />
+		<mkdir dir="${test.log.dir}" />
+		<echo>Done</echo>
+
+		<echo>Starting...</echo>
+
+		<fixInitiator settingsfile="${test.base.dir}/settings/FIX40Initiator.properties" id="main_initiator" />
+		<fixAcceptor settingsfile="${test.base.dir}/settings/FIX40Acceptor.properties" id="main_acceptor" />
+
+		<fixStart refid="main_initiator" />
+		<fixStart refid="main_acceptor" />
+
+		<fixWaitForLogin refid="main_acceptor" timeout="30" sender="TROIOI" target="BLP" type="FIX.4.0" />
+
+		<echo>Done</echo>
+	</target>
+<!-- Stop all components ====================================== -->
+	<target name="clean_all">
+		<echo>Stopping...</echo>
+		<fixStop refid="main_initiator" />
+		<echo>Done</echo>
+	</target>
+<!-- ========================================================== -->
+
+<!-- ========================================================== -->
+<target name="test">
+<description>
+        Check number of group entries witout validating contents (FIX 4.0):
+		1. Send Allocation (J) message with Repiting Group in repeating group
+		2. Wait for message with incorrect num in group for the second nested group
+		3. -- Error is logged
+</description>
+	<fixMessage id="J1">
+		<field name="MsgType" value="J" />
+        	<field name="70" value="123456" />
+	        <field name="71" value="0" />
+	        <group name="73">
+	                <field name="11" value="123457" />
+	        </group>
+	        <field name="54" value="1" />
+	        <field name="55" value="BWERT" />
+	        <field name="53" value="2" />
+	        <field name="6" value="26.43" />
+	        <field name="75" value="20081118-16:27:00.319" />
+                <group name="78">
+	                <field name="79" value="TEST" />
+        	        <field name="80" value="1" />
+	                <group name="85">
+	                        <field name="92" value="testtest" />
+	                        <field name="86" value="1" />
+        	        </group>
+                	<group name="85">
+	                        <field name="92" value="testtest" />
+	                        <field name="86" value="2"/>
+	                </group>
+	        </group>
+       		<group name="78">
+	                <field name="79" value="TEST2" />
+	                <field name="80" value="2" />
+	                <group name="85">
+	                        <field name="92" value="testtest" />
+	                        <field name="86" value="3" />
+        	        </group>
+	        </group>
+	</fixMessage>
+
+	<fixMessage id="J2">
+		<field name="MsgType" value="J" />
+                <group name="78">
+        	    <field name="85" value="2" />
+	        </group>
+                <group name="78">
+        	    <field name="85" value="2" />
+	        </group>
+	</fixMessage>
+
+	<fixSend refid="main_initiator" sender="TROIOI" target="BLP" type="FIX.4.0" repeat="1" count="1" repeatDelay="0" sendDelay="0">
+		<fixMessage source="J1" />
+	</fixSend>
+
+	<fixReceive refid="main_initiator" timeout="20" repeat="1" count="1" sender="BLP" target="TROIOI" type="FIX.4.0" strictOrdering="false">
+		<fixMessage source="J2" />
+	</fixReceive>
+</target>
+</project>

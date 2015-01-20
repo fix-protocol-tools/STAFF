@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<project name="fix_block_example" default="all">
+    <dirname property="base.dir" file="${ant.file}"/>
+    <import file="${base.dir}/fix_common.xml"/>
+
+    <!-- ================================================= -->
+    <target name="all" depends="clean, init, test, stop">
+    </target>
+    <!-- ================================================= -->
+
+    <target name="init">
+        <mkdir dir="${test.log.dir}"/>
+
+        <echo>Creating FIX Initiator...</echo>
+        <fixInitiator settingsfile="${fix_common.settings.dir}/FIXInitiator.properties" id="main_initiator"/>
+        <echo>Creating FIX Acceptor...</echo>
+        <fixAcceptor settingsfile="${fix_common.settings.dir}/FIXAcceptor.properties" id="main_acceptor"/>
+
+        <fixStart refid="main_initiator"/>
+        <fixStart refid="main_acceptor"/>
+        <echo>Waiting for initiator to establish connection...</echo>
+        <fixWaitForLogin refid="main_initiator" timeout="30"/>
+        <echo>Init done.</echo>
+    </target>
+    <!-- ================================================= -->
+
+    <target name="stop">
+        <echo>Stopping FIX Initiator...</echo>
+        <fixStop refid="main_initiator"/>
+        <sleep seconds="2"/>
+        <echo>Wait for logout on FIX Acceptor...</echo>
+    </target>
+    <!-- ================================================= -->
+
+    <target name="test">
+
+        <description>
+            1) Start Simple client manually as aceptor
+            2) Create Initiator
+            3) Send Email (MsgType = C) message from initiator to acceptor
+        </description>
+
+        <block id="MyEmail">
+            <field name="MsgType" value="C"/>
+            <field name="Subject" value="Test e-mail"/>
+            <field name="MsgType" value="C"/>
+            <field name="164" value="123456"/>
+            <field name="EmailType" value="0"/>
+            <group name="LinesOfText">
+                <field name="Text" value="Line 1"/>
+            </group>
+        </block>
+
+        <echo>Initiator waiting for logon</echo>
+        <fixWaitForLogin refid="main_initiator" timeout="30"/>
+        <echo>Logon successfull</echo>
+
+        <echo>Send Email (MsgType = C) message from initiator to acceptor</echo>
+        <java classname="Timestamp" outputproperty="UniqueID" fork="false"/>
+
+        <fixSend refid="main_initiator" repeat="1" count="1">
+            <fixMessage id="send_block">
+                <block source="MyEmail"/>
+            </fixMessage>
+        </fixSend>
+
+        <fixReceive refid="main_acceptor" timeout="30">
+            <fixMessage>
+                <block source="MyEmail"/>
+            </fixMessage>
+        </fixReceive>
+    </target>
+
+</project>

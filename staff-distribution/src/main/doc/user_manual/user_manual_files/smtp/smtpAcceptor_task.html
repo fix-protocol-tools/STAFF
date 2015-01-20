@@ -1,0 +1,68 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>smtpAcceptor</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>smtpAcceptor</h1>
+   <h2>Description</h2>
+   <p>smtpAcceptor type  represents simple SMTP server.</p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>id</td>
+     <td>Reference name to use SMTP Acceptor with other tasks.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>configurationDirectory</td>
+     <td>Path to the directory, containing <a href="smtp_properties.html">SMTP Acceptor configuration files</a>.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+   </table>
+   <h3>Note</h3>
+   <p>Only one SMTP Acceptor can be created in the script.</p>
+<h2>Examples</h2>
+<pre>
+	&lt;target name="run_all"&gt;
+		&lt;echo&gt;Starting...&lt;/echo&gt;
+		&lt;echo&gt;Create smtpAcceptor...&lt;/echo&gt;
+		&lt;smtpAcceptor configurationDirectory="${fix_common.settings.dir}" id="smtp_server"/&gt;
+	  	&lt;smtpStart refid="smtp_server"/&gt; 
+		&lt;echo&gt;Done&lt;&lt;/echo&gt;
+	&lt;/target&gt;
+	&lt;target name="stop_all"&gt;
+		&lt;echo&gt;Stopping...&lt;/echo&gt;
+		&lt;smtpStop refid="smtp_server"/&gt;
+		&lt;echo&gt;Done&lt;/echo&gt;
+	&lt;/target&gt;
+</pre>
+  </body>
+</html>

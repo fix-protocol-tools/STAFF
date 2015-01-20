@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--
+    This file is gone to be deprecated
+-->
+<antlib>
+    <typedef name="fixMessage" classname="com.btobits.automator.fix.utils.fix.FixMessageType" onerror="ignore"/>
+
+    <typedef name="fixInitiator" classname="com.btobits.automator.fix.utils.fix.FixInitiator"/>
+
+    <typedef name="fixAcceptor" classname="com.btobits.automator.fix.utils.fix.FixAcceptor" onerror="ignore"/>
+
+    <typedef name="fixFilterRawIn" classname="com.btobits.automator.fix.ant.filter.FixFilterRawIn"/>
+
+    <typedef name="fixFilterRawOut" classname="com.btobits.automator.fix.ant.filter.FixFilterRawOut"/>
+
+    <typedef name="fixFilterFixIn" classname="com.btobits.automator.fix.ant.filter.FixFilterFixIn"/>
+
+    <typedef name="fixFilterFixOut" classname="com.btobits.automator.fix.ant.filter.FixFilterFixOut"/>
+
+    <typedef name="fixFilterRule" classname="com.btobits.automator.fix.ant.filter.FixFilterRule"/>
+
+    <typedef name="fixFilterMatchField" classname="com.btobits.automator.fix.ant.filter.FixFieldRule"/>
+
+    <typedef name="fixFilterMatchCounter" classname="com.btobits.automator.fix.ant.filter.FixFilterCounter"/>
+
+    <typedef name="fixFilterAction" classname="com.btobits.automator.fix.ant.filter.FixFilterAction"/>
+
+    <typedef name="fixExecutor" classname="com.btobits.automator.fix.utils.fix.FixExecutor"/>
+
+    <typedef name="setControlLevel" classname="com.btobits.automator.fix.ant.task.SetControlLevel"/>
+
+    <taskdef name="fixStart" classname="com.btobits.automator.fix.ant.task.FixStartTask"/>
+
+    <taskdef name="fixStop" classname="com.btobits.automator.fix.ant.task.FixStopTask"/>
+
+    <taskdef name="fixWaitForLogin" classname="com.btobits.automator.fix.ant.task.FixWaitForLoginTask"/>
+
+    <taskdef name="fixWaitForLogout" classname="com.btobits.automator.fix.ant.task.FixWaitForLogoutTask"/>
+
+    <taskdef name="fixDisconnectExpect" classname="com.btobits.automator.fix.ant.task.FixDisconnectExpect"/>
+
+    <taskdef name="fixDisconnectValidate" classname="com.btobits.automator.fix.ant.task.FixDisconnectValidate"/>
+
+    <taskdef name="fixSend" classname="com.btobits.automator.fix.ant.task.FixSendTask"/>
+
+    <taskdef name="fixReceive" classname="com.btobits.automator.fix.ant.task.FixReceiveTask"/>
+
+    <taskdef name="fixLimit" classname="com.btobits.automator.fix.ant.task.FixLimitTask"/>
+
+    <taskdef name="fixSequenceReset" classname="com.btobits.automator.fix.ant.task.FixSequenceReset"/>
+
+    <taskdef name="fixField" classname="com.btobits.automator.fix.ant.task.FixFieldTask"/>
+
+    <typedef name="smtpAcceptor" classname="com.btobits.automator.fix.utils.fix.SMTPAcceptor"/>
+
+    <taskdef name="smtpStart" classname="com.btobits.automator.fix.ant.task.SMTPStartTask"/>
+
+    <taskdef name="smtpStop" classname="com.btobits.automator.fix.ant.task.SMTPStopTask"/>
+
+    <taskdef name="smtpReceive" classname="com.btobits.automator.fix.ant.task.SMTPReceive"/>
+
+    <typedef name="smtpMessage" classname="com.btobits.automator.fix.utils.fix.FixMessageType"/>
+
+    <typedef name="block" classname="com.btobits.automator.fix.utils.fix.FixBlockType"/>
+
+    <typedef name="tcpSimpleClient" classname="com.btobits.automator.fix.quickfix.transport.impl.TcpClient"/>
+
+    <typedef name="tcpSimpleServer" classname="com.btobits.automator.fix.quickfix.transport.impl.TcpServer"/>
+
+    <taskdef name="tcpSimpleStart" classname="com.btobits.automator.fix.quickfix.transport.task.TcpStartTask"/>
+
+    <taskdef name="tcpSimpleStop" classname="com.btobits.automator.fix.quickfix.transport.task.TcpStopTask"/>
+
+    <taskdef name="tcpSimpleSend" classname="com.btobits.automator.fix.quickfix.transport.task.TcpSendTask"/>
+
+    <taskdef name="tcpSimpleReceive" classname="com.btobits.automator.fix.quickfix.transport.task.TcpReceiveTask"/>
+
+    <typedef name="tcpServer" classname="com.btobits.automator.itch.transport.ant.type.TcpServerType"
+             onerror="ignore"/>
+
+    <typedef name="tcpClient" classname="com.btobits.automator.itch.transport.ant.type.TcpClientType"
+             onerror="ignore"/>
+
+    <typedef name="tcpMessage" classname="com.btobits.automator.itch.messages.ant.type.TcpMessageType"
+             onerror="ignore"/>
+
+    <taskdef name="tcpConfig" classname="com.btobits.automator.itch.transport.ant.task.TcpConfigTask"
+             onerror="ignore"/>
+
+    <taskdef name="tcpStart" classname="com.btobits.automator.itch.transport.ant.task.TcpStartTask"
+             onerror="ignore"/>
+
+    <taskdef name="tcpStop" classname="com.btobits.automator.itch.transport.ant.task.TcpStopTask"
+             onerror="ignore"/>
+
+    <taskdef name="tcpSend" classname="com.btobits.automator.itch.transport.ant.task.TcpSendTask"
+             onerror="ignore"/>
+
+    <taskdef name="tcpReceive" classname="com.btobits.automator.itch.transport.ant.task.TcpReceiveTask"
+             onerror="ignore"/>
+
+    <taskdef name="tcpLimit" classname="com.btobits.automator.itch.transport.ant.task.TcpLimitTask"
+             onerror="ignore"/>
+
+    <taskdef name="tcpGetField" classname="com.btobits.automator.itch.messages.ant.task.TcpGetFieldTask"
+             onerror="ignore"/>
+
+    <taskdef name="tcpSetField" classname="com.btobits.automator.itch.messages.ant.task.TcpSetFieldTask"
+             onerror="ignore"/>
+
+    <taskdef name="tcpGetEntriesNum" classname="com.btobits.automator.itch.messages.ant.task.TcpGetEntriesNumTask"
+             onerror="ignore"/>
+
+    <taskdef name="sqlExt" classname="com.btobits.automator.ant.sql.task.SQLCompareTask"/>
+
+    <taskdef name="forExt" classname="com.btobits.automator.ant.utils.task.ForTask"/>
+
+    <taskdef name="random" classname="com.btobits.automator.ant.utils.task.RandomTask"/>
+</antlib>

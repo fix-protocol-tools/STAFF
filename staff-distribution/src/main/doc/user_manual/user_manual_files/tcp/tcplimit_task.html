@@ -1,0 +1,87 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>TcpLimit(deprecated)</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>TcpLimit(deprecated)</h1>
+   <h2>Description</h2>
+   <p>
+     TcpLimit task is intended to ensure that no more messages were received by the TCP session.
+     For example, if the session should not receive any messages during some period of time,
+     you can check it with TcpLimit task. If the message will be received during specified period of time,
+     task fails.
+   </p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>refid</td>
+     <td>Reference name of the TCP session to receive messages from.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>sessionID</td>
+     <td>Session identifier of the TCP session where the messages should be received from.</td>
+     <td>None</td>
+     <td>Yes (For server session types only)</td>
+    </tr>
+    <tr>
+     <td>timeout</td>
+     <td>Number of seconds to wait for unexpected message</td>
+     <td>5</td>
+     <td>No</td>
+    </tr>
+   </table>
+   <h2>Examples</h2>
+   <pre>
+      &lt;tcpServer id="TServer"
+                 type="transient" port="8765" host="localhost"
+                 loginTimeout="30" heartbeatInterval="30" /&gt;
+
+      &lt;tcpClient id="TClient"
+                 type="transient" port="8765" host="localhost"
+                 loginTimeout="30" heartbeatInterval="30"
+                 sessionID="TC1" /&gt;
+
+      &lt;tcpClient id="TClient2"
+                 type="transient" port="8765" host="localhost"
+                 loginTimeout="30" heartbeatInterval="30"
+                 sessionID="TC2" /&gt;
+
+      &lt;tcpStart refid="TServer" /&gt;
+      &lt;tcpStart refid="TClient" /&gt;
+      &lt;tcpStart refid="TClient2" /&gt;
+
+      &lt;parallel&gt;
+        &lt;tcpLimit refid="TServer" sessionID="TC1" timeout="3" /&gt;
+        &lt;tcpLimit refid="TServer" sessionID="TC2" timeout="3" /&gt;
+      &lt;/parallel&gt;
+   </pre>
+  </body>
+</html>

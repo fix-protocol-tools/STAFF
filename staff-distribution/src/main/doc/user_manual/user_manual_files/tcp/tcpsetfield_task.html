@@ -1,0 +1,139 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>TcpSetField(deprecated)</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>TcpSetField(deprecated)</h1>
+   <h2>Description</h2>
+   <p>
+    TcpSetField task assigns value to the TCP message field.
+   </p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>refid</td>
+     <td>Reference to the TCP message to get field from</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>name</td>
+     <td>Field name to get</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+     <tr>
+      <td>value</td>
+      <td>Value to set</td>
+      <td>None</td>
+      <td>Yes</td>
+     </tr>
+   </table>
+   <h2>Examples</h2>
+   <pre>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;project name="test_set_field" default="test"&gt;
+  &lt;taskdef resource="com/btobits/coesfx/automator/antlib.xml"/&gt;
+  &lt;taskdef resource="net/sf/antcontrib/antlib.xml"/&gt;
+  &lt;taskdef resource="cpptasks.tasks"/&gt;
+  &lt;typedef resource="cpptasks.types"/&gt;
+
+  &lt;dirname property="test.dir" file="${ant.file}"/&gt;
+
+  &lt;property name="test.host" value="127.0.0.1" /&gt;
+  &lt;property name="test.port" value="8674" /&gt;
+
+  &lt;tcpMessage type="J" id="source.message" /&gt;
+
+  &lt;tcpMessage type="J" id="destination.message"&gt;
+    &lt;field name="Symbol" /&gt;
+    &lt;field name="ExecReqID" value="2" /&gt;
+    &lt;field name="RejectReason" value="Just test number 2" /&gt;
+  &lt;/tcpMessage&gt;
+
+  &lt;target name="tcp.configure"&gt;
+    &lt;tcpConfig
+      libraryName="jtcptransport"
+      configFile="${test.dir}/jtcptransport.conf" /&gt;
+  &lt;/target&gt;
+
+  &lt;target name="test" depends="tcp.configure"&gt;
+    &lt;tcpServer id="server" type="transient" host="${test.host}" port="${test.port}"
+               loginTimeout="30" heartbeatInterval="10" /&gt;
+
+    &lt;tcpClient id="client" type="transient" host="${test.host}" port="${test.port}"
+               loginTimeout="30" heartbeatInterval="1"
+               sessionID="test_client"/&gt;
+
+    &lt;tcpStart refid="client" /&gt;
+    &lt;tcpStart refid="server" /&gt;
+
+    &lt;tcpSetField name="Symbol" value="EURCAD" refid="source.message"/&gt;
+    &lt;tcpSetField name="ExecReqID" value="5" refid="source.message"/&gt;
+    &lt;tcpSetField name="RejectReason" value="Just test number 2" refid="source.message"/&gt;
+    &lt;tcpSetField name="ExecReqID" value="2" refid="source.message"/&gt;
+
+    &lt;tcpGetField refid="source.message" name="ExecReqID" property="test.erid" /&gt;
+
+    &lt;if&gt;
+      &lt;equals arg1="${test.erid}" arg2="2" /&gt;
+      &lt;else&gt;
+        &lt;fail&gt;
+          Expected symbol is '2', in fact is '${test.erid}'!
+        &lt;/fail&gt;
+      &lt;/else&gt;
+    &lt;/if&gt;
+
+    &lt;tcpSend refid="client"&gt;
+      &lt;tcpMessage source="source.message"/&gt;
+    &lt;/tcpSend&gt;
+
+    &lt;tcpReceive refid="server" sessionID="test_client" timeout="5"&gt;
+      &lt;tcpMessage source="destination.message" /&gt;
+    &lt;/tcpReceive&gt;
+
+    &lt;tcpGetField refid="destination.message" name="Symbol" property="msg.symbol" /&gt;
+
+    &lt;if&gt;
+      &lt;equals arg1="${msg.symbol}" arg2="EURCAD" /&gt;
+      &lt;else&gt;
+        &lt;fail&gt;
+          Expected symbol is 'EURCAD', in fact is '${msg.symbol}'!
+        &lt;/fail&gt;
+      &lt;/else&gt;
+    &lt;/if&gt;
+
+    &lt;tcpStop refid="client" /&gt;
+    &lt;tcpStop refid="server" /&gt;
+
+  &lt;/target&gt;
+&lt;/project&gt;
+   </pre>
+  </body>
+</html>

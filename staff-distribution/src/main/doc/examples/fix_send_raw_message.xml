@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<project name="fix_send_raw_message" default="all">
+    <dirname property="base.dir" file="${ant.file}"/>
+    <import file="${base.dir}/fix_common.xml"/>
+
+    <!-- ================================================= -->
+    <target name="all" depends="clean, init, test, clean">
+    </target>
+    <!-- ================================================= -->
+
+    <target name="init">
+        <mkdir dir="${test.log.dir}"/>
+
+        <echo>Creating FIX Initiator...</echo>
+        <fixInitiator settingsfile="${fix_common.settings.dir}/FIXInitiator.properties" id="main_initiator"/>
+        <echo>Creating FIX Acceptor...</echo>
+        <fixAcceptor settingsfile="${fix_common.settings.dir}/FIXAcceptor.properties" id="main_acceptor"/>
+
+        <fixStart refid="main_initiator"/>
+        <fixStart refid="main_acceptor"/>
+        <echo>Waiting for initiator to establish connection...</echo>
+        <fixWaitForLogin refid="main_initiator" timeout="30"/>
+    </target>
+    <!-- ================================================= -->
+
+    <target name="test">
+        <description>
+            1) Send standard fix tag in the message body of the message, for which the tag is not specified
+        </description>
+
+        <echo>Send Email (MsgType = C) message from initiator to acceptor</echo>
+        <java classname="Timestamp" outputproperty="UniqueID" fork="false"/>
+
+        <fixSend refid="main_initiator" validateOutgoing="false">
+            <fixMessage
+                    data="8=FIX.4.4/u00019=118/u000135=C/u000149=TRGT/u000156=SNDR/u000134=2/u000152=20081111-15:28:50.684/u0001164=123456/u000194=0/u0001147=Test e-mail/u000133=2/u000158=Line 1/u000158=Line 2/u000110=46/u0001"/>
+        </fixSend>
+
+        <fixReceive refid="main_acceptor" timeout="10" repeat="1" count="1"
+                    validateIncoming="false"
+                    backcheckheader="false"
+                    backchecktrailer="false"
+                    strictOrdering="true">
+            <fixMessage>
+                <field name="MsgType" value="C"/>
+                <field name="EmailType" value="0"/>
+                <field name="164" value="123456"/>
+                <field name="Subject" value="Test e-mail"/>
+                <group name="LinesOfText">
+                    <field name="Text" value="Line 1"/>
+                </group>
+                <group name="LinesOfText">
+                    <field name="Text" value="Line 2"/>
+                </group>
+            </fixMessage>
+        </fixReceive>
+    </target>
+
+</project>

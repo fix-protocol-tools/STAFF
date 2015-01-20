@@ -1,0 +1,55 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>setControlLevel</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>setControlLevel</h1>
+   <h2>Description</h2>
+   <p>Command to switch receive Application/Session Level messages.</p>
+   <p>Control level can be cahnged at any moment, but take into account, that Receive queue is cleared when setControlLevel is used. So if you want to capture reaction on message sent, change control level before send operator.</p>
+   <p><span class="note">Note:</span> if 'session' or 'both' mode is used, system will control all messages, including Logon (A), Heartbeat (0) etc.</p>
+   
+   <h2>Parameters</h2>
+   <table border="1" valign="top">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>controlLevel</td>
+     <td>Switch receive level messages.Possible values are:<br>application<br>session<br>both</td>
+     <td>application</td>
+     <td>Yes</td>
+    </tr>
+   </table>
+<h2>Examples</h2>
+<pre>
+   &lt;echo&gt;Creating FIX Initiator1...&lt;/echo&gt;
+   &lt;fixInitiator settingsfile="main_initiator.properties" id="main_initiator" /&gt;
+   &lt;echo&gt;Change message control level to Session level&lt;/echo&gt;
+   &lt;setControlLevel refid="main_initiator" controlLevel="session"/&gt;
+</pre>
+</body>
+</html>

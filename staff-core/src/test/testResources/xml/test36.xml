@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<project name="receive_custom_tag_existent.xml" default="all">
+  <dirname property="test.base.dir" file="${ant.file}" />
+  <import file="fix_common.xml" />
+  <taskdef resource="net/sf/antcontrib/antlib.xml" />
+
+<!-- ================================================= -->
+<target name="all" depends="clean, run_all, test, clean_all">
+</target>
+<!-- ================================================= -->
+
+<target name="clean">
+	<echo>Clearning log files...</echo>
+	<delete dir="${test.log.dir}" failonerror="false" />
+	<echo>Done</echo>
+</target>
+
+<!-- ================================================= -->
+<target name="run_all" >
+	<mkdir dir="${test.log.dir}" />
+	<echo>Creating FIX Initiator...</echo>
+	<fixInitiator settingsfile="${test.base.dir}/settings/FIXInitiator44.properties" id="main_initiator" />
+	<fixStart refid="main_initiator" />
+	<sleep seconds="1" />
+
+	<echo>Creating FIX Aceptor...</echo>
+	<fixAcceptor settingsfile="${test.base.dir}/settings/FIXAcceptor44.properties" id="main_acceptor" />
+	<fixStart refid="main_acceptor" />
+	<sleep seconds="1" />
+</target>
+<!-- ================================================= -->
+
+<target name="clean_all">
+    <echo>Stopping FIX Initiator...</echo>
+	<fixStop refid="main_initiator" />
+    <sleep seconds="1" />
+    <echo>Stopping FIX Acceptor...</echo>
+	<fixStop refid="main_acceptor" />
+    <sleep seconds="1" />
+</target>
+
+<!-- ================================================= -->
+
+<!-- ================================================= -->
+
+<target name="test">
+
+<description>
+1) Send standard fix tag in the message body of the message, for which the tag is not specified
+</description>
+
+    <fixWaitForLogin refid="main_initiator" timeout="30"/>
+
+	<echo>Send Email  (MsgType = C) message from initiator to acceptor</echo>
+	<java classname="Timestamp" outputproperty="UniqueID" fork="false" />
+
+    <fixMessage id="hand_made_msg">
+      <field name="MsgType" value="X" />
+    </fixMessage>
+
+    <property name="px_1" value="34.7" />
+    <property name="px_2" value="34.6" />
+
+    <fixField refid="hand_made_msg" action="set" group="NoMDEntries:1" name="MDUpdateAction" value="0" />
+    <fixField refid="hand_made_msg" action="set" group="NoMDEntries:1" name="MDEntryType" value="3" />
+    <fixField refid="hand_made_msg" action="set" group="NoMDEntries:1" name="MDEntrySize" value="190" />
+    <fixField refid="hand_made_msg" action="set" group="NoMDEntries:1" name="MDEntryPx" property="px_1" />
+    <fixField refid="hand_made_msg" action="set" group="NoMDEntries:1" name="Symbol" value="CSCO" />
+
+    <fixField refid="hand_made_msg" action="set" group="NoMDEntries:2" name="MDUpdateAction" value="0" />
+    <fixField refid="hand_made_msg" action="set" group="NoMDEntries:2" name="MDEntryType" value="3" />
+    <fixField refid="hand_made_msg" action="set" group="NoMDEntries:2" name="MDEntrySize" value="250" />
+    <fixField refid="hand_made_msg" action="set" group="NoMDEntries:2" name="MDEntryPx" value="${px_2}" />
+    <fixField refid="hand_made_msg" action="set" group="NoMDEntries:2" name="Symbol" value="ZVZZT" />
+
+    <fixSend refid="main_initiator" sender="TRGT" target="SNDR" type="FIX.4.4" repeat="1" count="1" repeatDelay="0" sendDelay="0">
+      <fixMessage source="hand_made_msg" />
+    </fixSend>
+
+    <fixMessage id="chart_2">
+      <field name="MsgType" value="X" />
+    </fixMessage>
+
+    <fixReceive refid="main_acceptor" timeout="10" repeat="1" count="1" sender="SNDR" target="TRGT" type="FIX.4.4">
+      <fixMessage source="chart_2" />
+    </fixReceive>
+
+    <fixField refid="chart_2" action="getGroupCount" name="NoMDEntries" property="no_charts_received" />
+
+    <forExt  from="1" to="${no_charts_received}" param="i">
+      <sequential>
+        <fixField refid="chart_2" action="get" group="NoMDEntries:@{i}" name="Symbol" property="grp_sym" />
+        <fixField refid="chart_2" action="get" group="NoMDEntries:@{i}" name="MDEntryPx" property="grp_px" />
+        <echo>Group (@{i}) Security: ${grp_sym} Price: ${grp_px}</echo>
+      </sequential>
+    </forExt>
+
+</target>
+
+</project>

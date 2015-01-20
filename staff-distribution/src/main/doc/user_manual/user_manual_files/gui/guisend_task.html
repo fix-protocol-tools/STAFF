@@ -1,0 +1,90 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>GuiSend</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>GuiSend</h1>
+   <h2>Description</h2>
+   <p>
+    GuiSend task sends a set of messages to the connection.
+   </p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>refid</td>
+     <td>Reference name of the connection to send messages to.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+     <tr>
+      <td>repeat</td>
+      <td>How many times repeat this operation</td>
+      <td>1</td>
+      <td>No</td>
+     </tr>
+     <tr>
+      <td>repeatDelay</td>
+      <td>Time to wait between performing operation</td>
+      <td>None</td>
+      <td>No</td>
+     </tr>
+     <tr>
+      <td>count</td>
+      <td>How many times send each message</td>
+      <td>1</td>
+      <td>No</td>
+     </tr>
+     <tr>
+      <td>sendDelay</td>
+      <td>Time to wait between message send operations</td>
+      <td>None</td>
+      <td>No</td>
+     </tr>
+   </table>
+   The GuiSend task should contain a list of messages to be sent.
+   <h2>Examples</h2>
+   <pre>
+      &lt;guiClient id="client" host="localhost" port="8099" /&gt;
+      &lt;guiStart refid="client" /&gt;
+
+      &lt;sleep seconds="1"/&gt;
+
+      &lt;guiSend refid="client"&gt;
+        &lt;guiMessage type="ADLQ"&gt;
+          &lt;field name="AC" value="test" /&gt;
+          &lt;field name="SM" value="EURUSD" /&gt;
+          &lt;field name="IS" value="0" /&gt;
+          &lt;field name="UI" value="test" /&gt;
+        &lt;/guiMessage&gt;
+      &lt;/guiSend&gt;
+
+      &lt;guiStop refid="client" /&gt;
+   </pre>
+  </body>
+</html>

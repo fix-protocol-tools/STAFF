@@ -1,0 +1,171 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>fixMessage</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>fixFilterRule</h1>
+   <h2>Description</h2>
+   <p><SPAN class="code">fixFilterRule</SPAN> is rule of filter. To fix filter can be added more than one rule</p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>refid</td>
+     <td>Reference name of the fix filter task.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>active</td>
+     <td>Enable fix filter rule or not. </td>
+     <td>true</td>
+     <td>No</td>
+    </tr>
+    <tr>
+    <tr>
+   </table>
+   <h2>Nested Elements</h2>
+   <p><SPAN class="code">fixFilterRule</SPAN> supports nested elements
+     <ul>
+       <li><SPAN class="code">&lt;fixFilterMatchField&gt;</SPAN></li>
+       <li><SPAN class="code">&lt;fixFilterMatchCounter&gt;</SPAN></li>
+       <li><SPAN class="code">&lt;fixFilterAction&gt;</SPAN></li>
+     </ul>
+   <h3>fixFilterMatchField</h3>
+	<p><SPAN class="code">&lt;fixFilterMatchField&gt;</SPAN> element is filter filed rule.
+        <SPAN class="code">fixFilterMatchField</SPAN> is not required for <SPAN class="code">fixFilterRule</SPAN>.
+        If one or more <SPAN class="code">&lt;fixFilterMatchField&gt;</SPAN> do not pass successfully then action will not apply to message.</p>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td valign="top">tag</td>
+     <td>Field tag which will be looking in filtered message.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>value</td>
+     <td>Field value. Can be regular expressions if <SPAN class="code">condition</SPAN> type is <SPAN class="code">regexp</SPAN></td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>condition</td>
+     <td>Type of conditions used for comparing the message fields. Possible values are:
+         <br><SPAN class="code">equals</SPAN>
+         <br><SPAN class="code">notEquals</SPAN>
+         <br><SPAN class="code">regexp</SPAN>
+     </td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>req</td>
+     <td>Field in message required or not.</td>
+     <td>True</td>
+     <td>No</td>
+    </tr>
+   </table>
+   <p></p>
+   <h3>fixFilterMatchCounter</h3>
+   <p><SPAN class="code">&lt;fixFilterMatchCounter&gt;</SPAN> element is filter counter rule.
+       <SPAN class="code">fixFilterMatchCounter</SPAN> is not required for <SPAN class="code">fixFilterRule</SPAN>.
+       This element can be only one in <SPAN class="code">fixFilterRule</SPAN>.
+       One of attribute(<SPAN class="code">from/to</SPAN>) must be present in <SPAN class="code">&lt;fixFilterMatchCounter&gt;</SPAN>.
+       If <SPAN class="code">&lt;fixFilterMatchCounter&gt;</SPAN> do not pass successfully then action will not apply to message.</p>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>from</td>
+     <td>Number of filtered messages, after which the rule will be successful. </td>
+     <td>None</td>
+     <td>Condition</td>
+    </tr>
+    <tr>
+     <td>to</td>
+     <td>Number of filtered messages, after which the rule will be not successful. </td>
+     <td>None</td>
+     <td>Condition</td>
+    </tr>
+   </table>
+   <h3>fixFilterAction</h3>
+	<p><SPAN class="code">&lt;fixFilterAction&gt;</SPAN> is action which will be apply to filtered message if all matchers are successful.</p>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>operation</td>
+     <td>Type of action over the filtered message. Possible values are:
+         <br><SPAN class="code">insertBefore</SPAN>
+         <br><SPAN class="code">insertAfter</SPAN>
+         <br><SPAN class="code">replace</SPAN>
+     </td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+   </table>
+   <p></p>
+   <p>The <SPAN class="code">&lt;fixFilterAction&gt;</SPAN> element should contain a list of FIX messages.</p>
+<h2>Examples</h2>
+<h3>Create filter rule. Send after 'New Order - Single'(only after first message) own message</h3>
+<pre>
+	&lt;fixFilterRule refid="ini_fix_out" active="true"&gt;
+		&lt;fixFilterMatchField tag="35" value="D" condition="equals" req="true"/&gt;
+		&lt;fixFilterMatchField tag="55" value="ZX*" condition="regexp"/&gt;
+		&lt;fixFilterMatchCounter from="0" to="1"/&gt;
+		&lt;fixFilterAction operation="insertAfter"&gt;
+			&lt;fixMessage&gt;
+				&lt;field name="MsgType" value="D"/&gt;
+				&lt;field name="HandlInst" value="1"/>&gt;
+				&lt;field name="Symbol" value="ZXZZT"/&gt;
+				&lt;field name="Side" value="1"/&gt;
+				&lt;field name="OrderQty" value="150"/&gt;
+				&lt;field name="OrdType" value="2"/&gt;
+				&lt;field name="ClOrdID" value="Order#2"/&gt;
+				&lt;field name="Price" value="34.7"/&gt;
+				&lt;field name="TransactTime" value="${new_order_trn_time}"/&gt;
+			&lt;/fixMessage&gt;
+		&lt;/fixFilterAction&gt;
+	&lt;/fixFilterRule&gt;
+</pre>
+  </body>
+</html>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<project name="fix_bug_17173" default="test">
+    <dirname property="test.base.dir" file="${ant.file}"/>
+    <import file="fix_common.xml"/>
+    <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+
+
+    <property name="test.log.dir" value="${test.base.dir}/log"/>
+
+    <target name="test" depends="clean">
+
+        <description>
+            Test bug 17173.
+            In this bug some problem with synchronization.
+            Problem arises when initiator send few messages and in this time initiator must send reject message.
+            Requires a fixFilter task
+        </description>
+
+        <mkdir dir="${test.log.dir}"/>
+
+        <echo>Creating FIX Initiator...</echo>
+        <fixInitiator settingsfile="${test.base.dir}/settings/FIXInitiator40.properties" id="main_initiator" />
+
+        <echo>Creating INITIATOR filter...</echo>
+        <!-- fix message object will income to filter -->
+        <fixFilterFixOut refid="main_initiator" id="ini_fix_out" active="true" debug="true"/>
+
+        <fixStart refid="main_initiator" />
+        <sleep seconds="1" />
+
+        <echo>Creating FIX Aceptor...</echo>
+        <fixAcceptor settingsfile="${test.base.dir}/settings/FIXAcceptor40.properties" id="main_acceptor" />
+        <fixStart refid="main_acceptor" />
+        <sleep seconds="1" />
+
+        <echo>Waiting for initiator to establish connection...</echo>
+        <fixWaitForLogin refid="main_initiator" timeout="10"/>
+
+        <echo>Creating New Order Single request...</echo>
+        <fixMessage id="new_order_single">
+            <field name="MsgType" value="D"/>
+            <field name="HandlInst" value="1"/>
+            <field name="Symbol" value="ZXZZT"/>
+            <field name="Side" value="1"/>
+            <field name="OrderQty" value="20000"/>
+            <field name="OrdType" value="2"/>
+            <field name="ClOrdID" value="Order#1"/>
+            <field name="Price" value="34.7"/>
+            <!--<field name="TransactTime" value="${new_order_trn_time}"/>-->
+        </fixMessage>
+
+        <echo>Creating message without a required field(tag=32)</echo>
+        <fixMessage id="8">
+            <field name="MsgType" value="8" />
+            <field name="14" value="0" />
+            <field name="17" value="12" />
+            <field name="37" value="11111111" />
+            <field name="38" value="1000" />
+            <field name="39" value="0" />
+            <field name="54" value="1" />
+            <field name="55" value="TESTB" />
+        </fixMessage>
+
+        <echo>Sending parallel correct message from initiator and broken message from acceptor.</echo>
+        <parallel>
+            <fixSend refid="main_initiator" repeat="100">
+                <fixMessage source="new_order_single"/>
+            </fixSend>
+
+            <fixSend refid="main_acceptor" repeat="40">
+                <fixMessage source="8"/>
+            </fixSend>
+
+        </parallel>
+        <sleep seconds="1"/>
+
+    </target>
+
+    <target name="clean_all">
+        <echo>Stopping FIX Initiator...</echo>
+        <fixStop refid="main_initiator" />
+        <sleep seconds="1" />
+
+        <echo>Stopping FIX Acceptor...</echo>
+        <fixStop refid="main_acceptor" />
+        <sleep seconds="1" />
+    </target>
+
+    <target name="clean">
+        <echo>Clearning log files...</echo>
+        <delete dir="${test.log.dir}" failonerror="false" />
+        <echo>Done</echo>
+    </target>
+
+</project>

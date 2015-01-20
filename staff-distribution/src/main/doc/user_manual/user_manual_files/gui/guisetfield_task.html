@@ -1,0 +1,83 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>GuiSetField</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>GuiSetField</h1>
+   <h2>Description</h2>
+   <p>
+    GuiSetField task assigns value to the message field.
+   </p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>refid</td>
+     <td>Reference to the message to get field from</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>name</td>
+     <td>Field name to get</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+     <tr>
+      <td>value</td>
+      <td>Value to set</td>
+      <td>None</td>
+      <td>Yes</td>
+     </tr>
+   </table>
+   <h2>Examples</h2>
+   <pre>
+
+   &lt;property name="test.host" value="127.0.0.1" /&gt;
+   &lt;property name="test.port" value="8099" /&gt;
+
+   &lt;guiMessage type="CMLI" id="request.login"/&gt;
+
+   &lt;guiSetField name="GT" value="CoesGUI" refid="request.login"/&gt;
+   &lt;guiSetField name="BV" value="N/A" refid="request.login"/&gt;
+   &lt;guiSetField name="UI" value="test" refid="request.login"/&gt;
+   &lt;guiSetField name="PW" value="test" refid="request.login"/&gt;
+   &lt;guiSetField name="BP" value="N/A" refid="request.login"/&gt;
+   &lt;guiSetField name="BI" value="COESfx" refid="request.login"/&gt;
+
+   &lt;guiClient id="client" host="${test.host}" port="${test.port}"/&gt;
+
+   &lt;guiStart refid="client" /&gt;
+
+   &lt;guiSend refid="client"&gt;
+     &lt;guiMessage source="request.login"/&gt;
+   &lt;/guiSend&gt;
+
+   </pre>
+  </body>
+</html>

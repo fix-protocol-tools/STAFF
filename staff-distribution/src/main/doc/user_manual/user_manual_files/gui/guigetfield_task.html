@@ -1,0 +1,92 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>GuiGetField</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>GuiGetField</h1>
+   <h2>Description</h2>
+   <p>
+    GuiGetField task extracts field from the message
+    and puts its value to the Ant property.
+   </p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>refid</td>
+     <td>Reference to the message to get field from</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>name</td>
+     <td>Field name to get</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+     <tr>
+      <td>property</td>
+      <td>Property to put field value to</td>
+      <td>The same as field name</td>
+      <td>Yes</td>
+     </tr>
+   </table>
+   <h2>Examples</h2>
+   <pre>
+
+  &lt;property name="test.host" value="127.0.0.1" /&gt;
+  &lt;property name="test.port" value="8099" /&gt;
+
+  &lt;guiClient id="client" host="${test.host}" port="${test.port}"/&gt;
+
+  &lt;guiMessage type="CMLR" id="destination.message"&gt;
+      &lt;field name="RC" /&gt;
+      &lt;field name="TO" /&gt;
+      &lt;field name="RO" value="N" /&gt;
+  &lt;/guiMessage&gt;
+
+  &lt;guiStart refid="client" /&gt;
+
+  &lt;guiReceive refid="client" timeout="10"&gt;
+      &lt;guiMessage source="destination.message"/&gt;
+  &lt;/guiReceive&gt;
+
+  &lt;guiGetField refid="destination.message" name="RC" property="msg.symbol" /&gt;
+
+  &lt;if&gt;
+      &lt;equals arg1="${msg.symbol}" arg2="0" /&gt;
+      &lt;else&gt;
+          &lt;fail&gt;
+             Expected symbol is '0', in fact is '${msg.symbol}'!
+          &lt;/fail&gt;
+      &lt;/else&gt;
+   &lt;/if&gt;
+
+   </pre>
+  </body>
+</html>

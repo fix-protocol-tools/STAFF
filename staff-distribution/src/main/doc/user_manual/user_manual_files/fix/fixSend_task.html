@@ -1,0 +1,135 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>fixSend</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>fixSend</h1></h1>
+   <h2>Description</h2>
+   <p>fixSend task sends FIX message to the session.</p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>refid</td>
+     <td>Reference name of the FIX Peer.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>sender</td>
+     <td>Deprecated. FIX Session SenderCompID.</td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+    <tr>
+     <td>target</td>
+     <td>Deprecated. FIX Session TargetCompID.</td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+    <tr>
+     <td>type</td>
+     <td>Deprecated. Session'sFIX Protocol version.</td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+    <tr>
+    <td>repeat</td>
+     <td>How many times repeat this operation.</td>
+     <td>1</td>
+     <td>No</td>
+    </tr>
+    <tr>
+     <td>repeatDelay</td>
+     <td>Time to wait between performing operation.<br>Format: INTEGER_VALUE [NANOSECONDS|MICROSECONDS|MILLISECONDS|SECONDS|MINUTES|HOURS|DAYS]<br>If unit of measurement is not specified, SECONDS is used.</td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+    <tr>
+     <td>count</td>
+     <td>How many times send each message.</td>
+     <td>1</td>
+     <td>No</td>
+    </tr>
+    <tr>
+     <td>sendDelay</td>
+     <td>Time to wait between message send operations� <br>Format: INTEGER_VALUE [NANOSECONDS|MICROSECONDS|MILLISECONDS|SECONDS|MINUTES|HOURS|DAYS]<br>If unit of measurement is not specified, SECONDS is used.</td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+	
+    <tr>
+     <td>file</td>
+     <td>File containing FIX messages to be sent name. FIX *.in and *.out ligs can be used without preprocessing. If file is specified, then <SPAN class="code">fixSend</SPAN> task shouldn't contain <SPAN class="code">fixMessage</SPAN> iside.</td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+    <tr>
+     <td>skip</td>
+     <td>FIX messages types to be skipped wile batch send from file. If not specified all messages will be sent.</td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+    <tr>
+     <td>validateOutgoing</td>
+     <td>Validate outgoing messages before send or not.</td>
+     <td>false</td>
+     <td>No</td>
+    </tr>
+    <tr>
+     <td>fillHeaderTrailer</td>
+     <td>Auto fill raw message before send. Possible values are:
+      <br><SPAN class="code">full</SPAN> - fill all the possible Header/Trailer fields
+      <br><SPAN class="code">onlyReq</SPAN> - fill only required filed
+      <br><SPAN class="code">none</SPAN> - does not fill the message</td>
+     <td>onlyReq</td>
+     <td>No</td>
+    </tr>
+   </table>
+<p>The fixSend task should contain a list of FIX messages to be sent.</p>
+<h2>Examples</h2>
+<h3>Send bath of messages from file</h3>
+<pre>
+    &lt;fixSend refid="main_initiator" file="${test.base.dir}/batches/TROIOI_BLP_40.in"  skip="1|A|6" repeat="1" count="1" repeatDelay="0" sendDelay="0" validateOutgoing="false"/&gt;
+</pre>
+
+<h3>Send a message 4 times</h3>
+<pre>
+    &lt;fixSend refid="main_initiator" repeat="2" count="2" repeatDelay="1" sendDelay="1"&gt;
+    	&lt;fixMessage source="J" /&gt;
+    &lt;/fixSend&gt;
+</pre>
+
+<h3>Send a message without validation</h3>
+<pre>
+    &lt;fixSend refid="main_initiator" validateOutgoing="false"&gt;
+        &lt;fixMessage source="J" /&gt;
+    &lt;/fixSend&gt;
+</pre>
+</body>
+</html>

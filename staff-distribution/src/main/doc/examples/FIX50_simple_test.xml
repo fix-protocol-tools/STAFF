@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<project name="Send_FixSession.xml" default="all">
+  <dirname property="test.base.dir" file="${ant.file}" />
+  <import file="${test.base.dir}/fix_common.xml" />
+  <taskdef resource="net/sf/antcontrib/antlib.xml" />
+  <property name="test.log.dir" value="${test.base.dir}/log" />
+
+  <sleep seconds="3" />
+
+
+<!-- ===================================================== -->
+     <target name="all" depends="run_all, test, stop_all">
+     </target>
+<!-- ===================================================== -->
+<!-- ======================Description==================== -->
+
+   <description>
+	1. Create Session1: Acceptor session of FIX50 version.
+	2. Create Session2: Initiator session of FIX50 version.
+	3. Send NewOrderSingle (D) message to Session2.
+        4. -- The message is forwarded to the Session1.
+   </description>
+
+<!-- ================================================= -->
+<!-- ======= Run all components and clean logs ======= -->
+
+<target name="run_all" >
+
+    <echo>***Starting STAFF***</echo>
+
+    <echo>Clearing STAFF log files...</echo>
+    <delete dir="${test.log.dir}" failonerror="true" />
+    <echo>Done</echo>
+
+    <echo>Creating STAFF log directiry...</echo>
+    <mkdir dir="${test.log.dir}" />
+    <echo>Done</echo>
+
+    <echo>Creating FIX Acceptor...</echo>
+    <fixAcceptor settingsfile="${fix_common.settings.dir}/FIX50_Acceptor.properties" id="acceptor" />
+    <fixStart refid="acceptor" />
+    <sleep seconds="1" />
+    <echo>Done</echo>
+
+    <echo>Creating FIX Initiator...</echo>
+    <fixInitiator settingsfile="${fix_common.settings.dir}/FIX50_Initiator.properties" id="initiator" />
+    <fixStart refid="initiator" />
+    <sleep seconds="1" />
+    <echo>Done</echo>
+
+  </target>
+
+<!-- ================================================= -->
+
+<!-- ================================================= -->
+<!-- ====== Stop all components and clean logs ======= -->
+
+  <target name="stop_all">
+
+    <echo>Stopping FIX Initiator</echo>
+    <fixStop refid="initiator" />
+    <sleep seconds="1" />
+    <echo>Done</echo>
+
+    <echo>Stopping FIX Acceptor</echo>
+    <fixStop refid="acceptor" />
+    <sleep seconds="1" />
+    <echo>Done</echo>
+
+  </target>
+
+<!-- ================================================= -->
+
+<!-- ================================================= -->
+<!-- ====================Test========================= -->
+
+  <target name="test">
+
+   <echo>Waiting for initiator to establish connection...</echo>
+   <fixWaitForLogin refid="initiator" timeout="30" />
+   <echo>Done</echo>
+
+   <echo>Creating New Order Single (D) message...</echo>
+   <tstamp>
+      <format property="new_order_trn_time" pattern="yyyyMMdd-hh:mm:ss.SSS" locale="en,US" offset="-5" unit="hour" />
+    </tstamp>
+    <fixMessage id="new_order_single">
+      <field name="MsgType" value="D" />
+      <field name="HandlInst" value="1" />
+      <field name="Symbol" value="ZXZZT" />
+      <field name="Side" value="1" />
+      <field name="OrderQty" value="20000" />
+      <field name="OrdType" value="2" />
+      <field name="ClOrdID" value="Order#1" />
+      <field name="Price" value="34.7" />
+      <field name="ExDestination" value="1" />
+      <field name="TransactTime" value="${new_order_trn_time}" />
+    </fixMessage>
+
+    <echo>Sending New Order Single (D) message...</echo>
+    <fixSend refid="initiator" >
+             <fixMessage source="new_order_single" />
+    </fixSend>
+
+    <echo>Waiting for New Order Single (D) message to be received...</echo>
+    <fixReceive refid="acceptor" timeout="10">
+                <fixMessage source="new_order_single" />
+    </fixReceive>
+    <echo>Done</echo>
+
+  </target>
+
+</project>

@@ -1,0 +1,76 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>Block</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>Block</h1>
+   <h2>Description</h2>
+   <p>Block task specify a set of FIX fields with values.</p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>id</td>
+     <td>Reference name to use block with other tasks.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+   </table>
+<h2>Examples</h2>
+<pre>
+&lt;target name="test"&gt;
+	&lt;block id="MyEmail"&gt;
+		&lt;field name="Subject" value="Test e-mail" /&gt;
+		&lt;group name="LinesOfText">
+			&lt;field name="Text" value="Line 1" /&gt;
+		&lt;/group&gt;
+		&lt;group name="LinesOfText"&gt;
+			&lt;field name="Text" value="Line 2" /&gt;
+		&lt;/group&gt;
+		&lt;group name="LinesOfText"&gt;
+			&lt;field name="Text" value="Line 3" /&gt;
+		&lt;/group&gt;
+	&lt;/block&gt;
+
+   	&lt;fixWaitForLogin refid="main_initiator" timeout="30" sender="SNDR" target="TRGT" type="FIX.4.2"/&gt;
+	&lt;echo&gt;Send Email  (MsgType = C) message from initiator to acceptor&lt;/echo&gt;
+	&lt;java classname="Timestamp" outputproperty="UniqueID" fork="false" /&gt;
+
+	&lt;fixSend refid="main_initiator" sender="SNDR" target="TRGT" type="FIX.4.2" repeat="1" count="1" repeatDelay="0" sendDelay="0"&gt;
+		&lt;fixMessage&gt;
+			&lt;field name="MsgType" value="C" /&gt;
+			&lt;field name="164" value="123456" /&gt;
+			&lt;field name="EmailType" value="0" /&gt;
+			&lt;field name="Subject" value="Test e-mail" /&gt;
+			&lt;block source="MyEmail" /&gt;
+		&lt;/fixMessage&gt;
+	&lt;/fixSend&gt;
+&lt;/target&gt;
+</pre>
+  </body>
+</html>

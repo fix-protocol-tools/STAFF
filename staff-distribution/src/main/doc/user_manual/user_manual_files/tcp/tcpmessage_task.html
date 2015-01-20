@@ -1,0 +1,213 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>tcpMessage(deprecated)</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>tcpMessage(deprecated)</h1>
+   <h2>Description</h2>
+   <p>
+	TcpMessage type represents an ITCH message object.
+   </p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>type</td>
+     <td>Type of the message specified in the dictionary. Note: this parameter is case sensitive.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>id</td>
+     <td>Reference name of the message objest to use with other tasks.</td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+    <tr>
+     <td>source</td>
+     <td>Reference name of the message objest specified earlier used in other tasks.</td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+   </table>
+   <h2>Nested Elements</h2>
+   <p><SPAN class="code">tcpMessage</SPAN> supports nested elements <SPAN class="code">&lt;field&gt;</SPAN> and <SPAN class="code">&lt;group&gt;</SPAN>.</p>
+   <h3>field</h3>
+   <p><SPAN class="code">&lt;Field&gt;</SPAN> element represents ITCH message field.</p>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>name</td>
+     <td>Name of the ITCH field specified in the dictionary. Set of supported names depends on the parser library used for testing.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>value</td>
+     <td>Field value. Default field value is specified in the dictionary and depends on the field type.</td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+    <tr>
+     <td>tolerance</td>
+     <td>Specifies accuracy of comparison of expected value with received one. If difference of values exceeds specified <SPAN class="code">tolerance</SPAN>, then comparison fails.</td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+   </table>
+   <h3>group</h3>
+   <p><SPAN class="code">&lt;Group&gt;</SPAN> element represents ITCH message repeating group.</p>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>name</td>
+     <td>Name of the ITCH repeating group specified in the dictionary. Set of supported names depends on the parser library used for testing.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+   </table>
+   <h3>entriesNum</h3>
+   <p><SPAN class="code">&lt;entriesNum&gt;</SPAN> element represents number of entries in the specified repeating group. The element can be used with <SPAN class="code">&lt;tcpReceive&gt;</SPAN> task only.</p>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>name</td>
+     <td>Name of the ITCH repeating group specified in the dictionary. Set of supported names depends on the parser library used for testing.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>values</td>
+     <td>Expected number of entries in the repeating group.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+   </table>
+   <p><SPAN class="code">&lt;Group&gt;</SPAN> element supports <SPAN class="code">&lt;groupentry&gt;</SPAN> nested element, which supports <SPAN class="code">&lt;field&gt;</SPAN> and <SPAN class="code">&lt;group&gt;</SPAN> nested elements. Leading field of the group is set automatically according to the number of specified group entries.</p>
+   <h2>Examples</h2>
+   <h3>Message with group</h3>
+   <pre>
+	&lt;tcpMessage type="U" id="UserAccountResponse"&gt;                                  
+		&lt;field name="UserSessionID" value="5"/&gt;
+		&lt;group name="UserAccounts"&gt;                                             
+			&lt;groupentry&gt;                                                    
+				&lt;field name="AccountID"		value="1"/&gt;
+				&lt;field name="AccountShortName"	value="Acc1"/&gt;          
+				&lt;field name="AccountName"	value="Test account 1"/&gt;
+				&lt;field name="ClearingFirmID"	value="1"/&gt;
+				&lt;field name="ClearingFirmName"	value="ClrngFirm1"/&gt;
+				&lt;field name="OrganizationID"	value="1"/&gt;
+				&lt;field name="OrganizationName"	value="Org1"/&gt;
+			&lt;/groupentry&gt;
+			&lt;groupentry&gt;
+				&lt;field name="AccountID"		value="2"/&gt;
+				&lt;field name="AccountShortName"	value="Acc2"/&gt;
+				&lt;field name="AccountName"	value="Test account 2"/&gt;
+				&lt;field name="ClearingFirmID"	value="1"/&gt;
+				&lt;field name="ClearingFirmName"	value="ClrngFirm1"/&gt;
+				&lt;field name="OrganizationID"	value="1"/&gt;
+				&lt;field name="OrganizationName"	value="Org1"/&gt;
+			&lt;/groupentry&gt;
+		&lt;/group&gt;                                                    
+	&lt;/tcpMessage&gt;                                                                 
+   </pre>
+   <h3>Using source and tolerance</h3>
+   <pre>
+	&lt;tcpMessage type="D" id="NewOrderSingle"&gt;
+		&lt;field name="ClOrdID" value="ClOrd${ID}" /&gt;
+		&lt;field name="InstrumentID" value="${Symbol}" /&gt;
+		&lt;field name="TransactTime" value="${ID}" tolerance="1000"/&gt;
+		&lt;field name="OrderClass" value="R" /&gt;
+		&lt;field name="OrderType" value="2" /&gt;
+		&lt;field name="Side" value="${Side}" /&gt;
+		&lt;field name="OrderQty" value="${Qty}" /&gt;
+		&lt;field name="HiddenQty" value="0" /&gt;
+		&lt;field name="Price" value="${Price}" /&gt;
+		&lt;field name="TimeInForce" value="0" /&gt;
+		&lt;field name="ExpireTime" value="0" /&gt;
+		&lt;field name="AccountID" value="${AccountID}" /&gt;
+		&lt;field name="UserID" value="123" /&gt;
+	&lt;/tcpMessage&gt;
+	&lt;tcpReceive refid="TClient" timeout="10"&gt;
+		&lt;tcpMessage source="NewOrderSingle" /&gt;
+	&lt;/tcpReceive&gt
+   </pre>
+   <h3>Using entriesNum</h3>
+   <pre>
+   	&lt;tcpMessage type="U" id="UserAccountResponse"&gt;
+		&lt;field name="UserSessionID" value="5"/&gt;
+		&lt;group name="UserAccounts"&gt;
+			&lt;groupentry&gt;
+				&lt;field name="AccountID"			value="1"/&gt;
+				&lt;field name="AccountShortName"	value="Acc1"/&gt;
+				&lt;field name="AccountName"		value="Test account 1"/&gt;
+				&lt;field name="ClearingFirmID"		value="1"/&gt;
+				&lt;field name="ClearingFirmName"	value="ClrngFirm1"/&gt;
+				&lt;field name="OrganizationID"		value="1"/&gt;
+				&lt;field name="OrganizationName"	value="Org1"/&gt;
+			&lt;/groupentry&gt;
+			&lt;groupentry&gt;
+				&lt;field name="AccountID"			value="2"/&gt;
+				&lt;field name="AccountShortName"	value="Acc2"/&gt;
+				&lt;field name="AccountName"		value="Test account 2"/&gt;
+				&lt;field name="ClearingFirmID"		value="1"/&gt;
+				&lt;field name="ClearingFirmName"	value="ClrngFirm1"/&gt;
+				&lt;field name="OrganizationID"		value="1"/&gt;
+				&lt;field name="OrganizationName"	value="Org1"/&gt;
+			&lt;/groupentry&gt;
+		&lt;/group&gt;
+	&lt;/tcpMessage&gt;
+
+	&lt;tcpSend refid="TClient"&gt;
+		&lt;tcpMessage source="UserAccountResponse" /&gt;
+	&lt;/tcpSend&gt;
+
+	&lt;tcpReceive refid="TServer" sessionID="${ITCHTransSessionID}"&gt;
+		&lt;tcpMessage type="U"&gt;
+			&lt;entriesNum name="UserAccounts" value="2"/&gt;
+		&lt;/tcpMessage&gt;
+	&lt;/tcpReceive&gt;
+
+   </pre>
+  </body>
+</html>

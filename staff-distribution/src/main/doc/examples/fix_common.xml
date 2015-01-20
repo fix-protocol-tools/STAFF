@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<project name="fix_common">
+  <dirname property="fix_common.base.dir" file="${ant.file}" />
+  <dirname property="test.base.dir" file="${ant.file}" />
+  <property environment="env" />
+
+  <property name="fix_common.lib.dir" value="${fix_common.base.dir}/lib" />
+  <property name="fix_common.settings.dir" value="${fix_common.base.dir}/settings" />
+  <property name="test.log.dir" value="${test.base.dir}/log" />
+
+  <taskdef resource="com/btobits/automator/fix/antlib.xml" />
+
+  <target name="clean">
+     <echo>Clearning log files...</echo>
+     <delete dir="${test.log.dir}" failonerror="true" />
+  </target>
+
+</project>

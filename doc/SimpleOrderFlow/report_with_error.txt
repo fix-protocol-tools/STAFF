@@ -1,0 +1,36 @@
+Buildfile: D:\work\STAFF\doc\SimpleOrderFlow\SimpleOrderFlow_with_error.xml
+  [taskdef] Software Testing Automation Framework for FIX version 0.3.7
+
+run_all:
+     [echo] Clearing STAFF log files...
+   [delete] Deleting directory D:\work\STAFF\doc\SimpleOrderFlow\log
+     [echo] Done
+     [echo] Creating STAFF log directiry...
+    [mkdir] Created dir: D:\work\STAFF\doc\SimpleOrderFlow\log
+     [echo] Done
+     [echo] Creating FIX Acceptor...
+     [echo] Creating FIX Initiator...
+     [echo] Starting FIX Acceptor...
+     [echo] Starting FIX Initiator...
+     [echo] Done
+
+test:
+     [echo] Waiting for initiator1 to establish connection...
+     [echo] Done
+     [echo] Send New Order Single requests...
+  [fixSend] Send fix message [8=FIX.4.49=10535=D49=SNDR56=TRGT11=Order#121=138=2000040=244=34.754=155=Symbol60=20121210-09:34:29.077100=110=082].
+     [echo] Done
+     [echo] Waiting for New Order Single message to be received: - incorrect values of Side and Symbol ...
+[fixReceive] Receive fix message [8=FIX.4.49=13535=D34=249=SNDR52=20121210-12:34:29.10056=TRGT11=Order#121=138=2000040=244=34.754=155=Symbol60=20121210-09:34:29.077100=110=239].
+
+BUILD FAILED
+D:\work\STAFF\doc\SimpleOrderFlow\SimpleOrderFlow_with_error.xml:112:
+! Task fixReceive message difference exception Error comparing messages: 8=FIX.4.49=13535=D34=249=SNDR52=20121210-12:34:29.10056=TRGT11=Order#121=138=2000040=244=34.754=155=Symbol60=20121210-09:34:29.077100=110=239. Cause:
+
+1) Field [Symbol, Symbol2] != [55, Symbol]  does not equal in received message
+2) Field [SymbolSfx, Sfx] does not exist in received message
+3) Field [Side, 2] != [54, 1]  does not equal in received message
+
+
+Total time: 9 seconds
+

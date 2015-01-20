@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<project name="11_out_of_order.xml" default="all">
+    <dirname property="test.base.dir" file="${ant.file}"/>
+    <import file="${test.base.dir}\common\fix_common.xml"/>
+    <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+    <property name="test.log.dir" value="${test.base.dir}/log"/>
+
+    <!-- ================================================= -->
+    <target name="all" depends="clean, init, test, stop">
+    </target>
+    <!-- ================================================= -->
+
+    <target name="init">
+        <mkdir dir="${test.log.dir}"/>
+
+        <echo>Creating FIX Initiator...</echo>
+        <fixInitiator settingsfile="${test.base.dir}/settings/FIXInitiator.properties" id="main_initiator"/>
+
+        <echo>Creating FIX Aceptor...</echo>
+        <fixAcceptor settingsfile="${test.base.dir}/settings/FIXAcceptor.properties" id="main_acceptor"/>
+
+        <echo>Start initiator session...</echo>
+        <fixStart refid="main_initiator"/>
+        <sleep seconds="1"/>
+
+        <echo>Start acceptor session...</echo>
+        <fixStart refid="main_acceptor"/>
+        <sleep seconds="1"/>
+
+        <echo>Wait for login...</echo>
+        <fixWaitForLogin refid="main_initiator" timeout="30"/>
+
+    </target>
+
+    <target name="stop">
+        <echo>Stopping FIX Initiator...</echo>
+        <fixStop refid="main_initiator"/>
+        <sleep seconds="1"/>
+        <echo>Stopping FIX Acceptor...</echo>
+        <fixStop refid="main_acceptor"/>
+        <sleep seconds="1"/>
+    </target>
+
+    <target name="test">
+        <description>
+            Session established between STAFF and counterparty (logon exchange was successful);
+            STAFF sends Application Level message with repeating group out of order (first field of group is not first);
+            STAFF should receive reject message (35=3);
+            The counterparty should increment incoming seq num; (we do not check this via STAFF, this is simply information)
+            STAFF should send Test Request (35=1);
+            STAFF should receive Heartbeat (35=0) (Test Request Ack).
+        </description>
+
+        <echo>Change message control level to Session level</echo>
+        <setControlLevel refid="main_initiator" controlLevel="session"/>
+
+        <echo>Send Application Level message with repeating group out of order (first field of group is not first)</echo>
+        <fixSend refid="main_initiator" repeat="1" count="1" validateOutgoing="false" fillHeaderTrailer="onlyreq">
+            <fixMessage data="8=FIX.4.4/u00019=97/u000135=W/u000134=2/u000149=TRGT/u000152=20110106-09:52:38.349/u000156=SNDR/u000155=TEST/u0001268=2/u0001270=15.96/u0001269=3/u0001269=3/u0001270=17.55/u000110=079/u0001"/>
+        </fixSend>
+
+        <echo>Waiting for receive reject message (35=3)...</echo>
+        <fixReceive refid="main_initiator" timeout="10" repeat="1" count="1">
+            <fixMessage>
+                <field name="MsgType" value="3"/>
+            </fixMessage>
+        </fixReceive>
+
+        <echo>Send test request message</echo>
+        <fixSend refid="main_initiator" repeat="1" count="1">
+            <fixMessage>
+                <field name="MsgType" value="1"/>
+                <field name="112" value="123456789"/>
+            </fixMessage>
+        </fixSend>
+
+        <echo>Waiting for Heartbeat message with 112="123456789" to be received...</echo>
+        <fixReceive refid="main_initiator" timeout="10" repeat="1" count="1">
+            <fixMessage>
+                <field name="MsgType" value="0"/>
+                <field name="112" value="123456789"/>
+            </fixMessage>
+        </fixReceive>
+
+    </target>
+</project>

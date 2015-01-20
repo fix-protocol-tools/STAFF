@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<project name="SimpleOrderFlow.xml" default="all">
+  <dirname property="test.base.dir" file="${ant.file}" />
+  <import file="${test.base.dir}/settings/fix_common.xml" />
+  <taskdef resource="net/sf/antcontrib/antlib.xml" />
+  <property name="test.log.dir" value="${test.base.dir}/log" />
+
+
+<sleep seconds="3" />
+
+<!-- ===================================================== -->
+<target name="all" depends="run_all, test, stop_all">
+</target>
+<!-- ===================================================== -->
+<!-- =====================Description===================== -->
+
+<description>
+	Simple Order Flow (FIX44):
+	1. Create FIX Acceptor 
+	2. Create FIX Initiator
+	3. Send New Order Single (D) message from Initiator to Acceptor
+	4. Check received message
+	5. Send Execution Report (8) - New message to Initiator
+	6. Check received message
+	7. Send Execution Report (8) - Filled message to Initiator
+	8. Check received message
+</description>
+
+<!-- ===================================================== -->
+
+<!-- ===================================================== -->
+<!-- ========= Run all components and clean logs ========= -->
+
+<target name="run_all" >
+
+	<echo>Clearing STAFF log files...</echo>
+	<delete dir="${test.log.dir}" failonerror="true" />
+	<echo>Done</echo>
+
+	<echo>Creating STAFF log directiry...</echo>
+	<mkdir dir="${test.log.dir}" /> 
+	<echo>Done</echo>
+
+	<echo>Creating FIX Acceptor...</echo>
+	<fixAcceptor settingsfile="${fix_common.settings.dir}/SimpleOrderFlow_Acceptor.properties" id="acceptor" />
+
+        <echo>Creating FIX Initiator...</echo>
+	<fixInitiator settingsfile="${fix_common.settings.dir}/SimpleOrderFlow_Initiator.properties" id="initiator" />
+
+	<echo>Starting FIX Acceptor...</echo>
+        <fixStart refid="acceptor" />
+	<sleep seconds="1" />    
+
+	<echo>Starting FIX Initiator...</echo>
+        <fixStart refid="initiator" />
+	<sleep seconds="1" />    
+        <echo>Done</echo>
+
+</target>
+
+<!-- ==================================================== -->
+
+<!-- ==================================================== -->
+<!-- ============== Stop all components ================= -->
+
+<target name="stop_all">                                  
+
+	<echo>Stopping FIX Initiator...</echo>
+	<fixStop refid="initiator" />
+	<sleep seconds="1" />
+        <echo>Done</echo>
+
+	<echo>Stopping FIX Acceptor...</echo>
+	<fixStop refid="acceptor" />
+	<sleep seconds="1" />
+        <echo>Done</echo>
+
+</target>
+
+<!-- ==================================================== -->
+
+<!-- ==================================================== -->
+<!-- ===================Test============================= -->
+ 
+<target name="test">
+
+	<echo>Waiting for initiator1 to establish connection...</echo>
+	<fixWaitForLogin refid="initiator" timeout="30" sender="SNDR" target="TRGT" type="FIX.4.4"/>
+	<echo>Done</echo>
+
+	<tstamp>
+		<format property="new_order_trn_time" pattern="yyyyMMdd-hh:mm:ss.SSS" locale="en,US" offset="-5" unit="hour" />
+	</tstamp>
+
+  	<echo>Send New Order Single requests...</echo>
+	<fixSend refid="initiator">
+  	  	<fixMessage id="new_order_single">
+			<field name="MsgType" value="D" />
+			<field name="HandlInst" value="1" />		<!-- set tag value as constant -->
+			<field name="Symbol" value="Symbol" />
+			<field name="Side" value="1" />
+			<field name="OrderQty" value="20000" />
+			<field name="OrdType" value="2" />
+			<field name="ClOrdID" value="Order#1" />
+			<field name="Price" value="34.7" />
+			<field name="ExDestination" value="1" />
+                        <field name="TransactTime" value="${new_order_trn_time}" />	<!-- set tag value as variable -->
+		</fixMessage>
+	</fixSend>
+	<echo>Done</echo>
+
+	<echo>Waiting for New Order Single message to be received...</echo>
+  	<fixReceive refid="acceptor" timeout="10" >
+		<fixMessage id="new_order_single">
+			<field name="MsgType" 	value="D" />
+			<field name="HandlInst" value="1" />
+			<field name="Symbol" 	value="Symbol" />
+			<field name="Side" 	value="1" />
+			<field name="OrderQty" 	value="20000" />
+			<field name="OrdType" 	value="2" />	<!-- check tag value -->
+			<field name="ClOrdID" />		<!-- check tag presence -->
+			<field name="Price" 	value="34.7" />
+			<field name="ExDestination" value="1" />
+		</fixMessage>
+	</fixReceive>
+	<echo>Done</echo>
+
+	<echo>Get ClOrdID from the message received...</echo>
+	<fixField refid="new_order_single" action="get" name="ClOrdID" property="ClientOrderID" />
+	<echo>Done</echo>
+
+
+  	<echo>Create Execution Report message...</echo>
+	<tstamp>
+		<format property="OrderID" pattern="yyyyMMdd-hh:mm:ss.SSS" locale="en,US" offset="-5" unit="hour" />
+	</tstamp>
+	<tstamp>
+		<format property="ExecID" pattern="yyyyMMdd-hh:mm:ss.SSS" locale="en,US" offset="-5" unit="hour" />
+	</tstamp>
+  	<fixMessage id="execution_report">
+		<field name="MsgType" 	value="8" />
+		<field name="OrderID" 	value="${OrderID}" />
+		<field name="ClOrdID" 	value="${ClientOrderID}" />
+		<field name="ExecID" 	value="${ExecID}" />		<!-- refer tag by name -->
+		<field name="150" 	value="1" />			<!-- refer tag by number -->
+		<field name="39" 	value="1" />
+		<field name="Symbol" 	value="Symbol" />
+		<field name="Side" 	value="1" />
+		<field name="OrdType" 	value="2" />
+		<field name="151" 	value="20000" />
+		<field name="14" 	value="0" />
+		<field name="6" 	value="0.0" />
+	</fixMessage>
+	<echo>Done</echo>
+
+  	<echo>Send Execution Report (8) - New...</echo>
+	<fixSend refid="acceptor">
+  	  	<fixMessage source="execution_report" />
+	</fixSend>
+	<echo>Done</echo>
+
+	<echo>Waiting for Execution Report (8) message to be received...</echo>
+  	<fixReceive refid="initiator" timeout="10" >
+		<fixMessage source="execution_report" />	
+	</fixReceive>
+	<echo>Done</echo>
+
+	<echo>Update Execution Report fields for Fill...</echo>
+	<tstamp>
+		<format property="ExecID_Filled" pattern="yyyyMMdd-hh:mm:ss.SSS" locale="en,US" offset="-5" unit="hour" />
+	</tstamp>
+	<fixField refid="execution_report" action="set" name="ExecID" property="ExecID_Filled" />
+	<fixField refid="execution_report" action="set" name="150" value="F" />
+	<fixField refid="execution_report" action="set" name="39" value="2" />
+	<fixField refid="execution_report" action="set" name="151" value="0" />
+	<fixField refid="execution_report" action="set" name="14" value="20000" />
+	<fixField refid="execution_report" action="set" name="6" value="25.5" />
+
+  	<echo>Send Execution Report (8) - Filled...</echo>
+	<fixSend refid="acceptor">
+  	  	<fixMessage source="execution_report" />
+	</fixSend>
+	<echo>Done</echo>
+
+	<echo>Waiting for Execution Report (8) message to be received...</echo>
+  	<fixReceive refid="initiator" timeout="10" >
+		<fixMessage>	
+			<field name="MsgType" 	value="8" />
+			<field name="ExecID" 	value="${ExecID_Filled}" />
+			<field name="150" 	value="F" />
+			<field name="39" 	value="2" />
+			<field name="151" 	value="0" />
+			<field name="14" 	value="20000" />
+			<field name="6" 	value="25.5" />
+		</fixMessage>
+	</fixReceive>
+	<echo>Done</echo>
+</target>
+</project>

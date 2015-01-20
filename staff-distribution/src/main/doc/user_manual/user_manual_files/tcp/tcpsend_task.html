@@ -1,0 +1,119 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>TcpSend(deprecated)</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>TcpSend(deprecated)</h1>
+   <h2>Description</h2>
+   <p>
+    TcpSend task sends a set of messages to the TCP session.
+   </p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>refid</td>
+     <td>Reference name of the TCP session to send messages to.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>sessionID</td>
+     <td>Session identifier of the TCP session that should received the messages.</td>
+     <td>None</td>
+     <td>Yes (For server session types only)</td>
+    </tr>
+     <tr>
+      <td>repeat</td>
+      <td>How many times repeat this operation</td>
+      <td>1</td>
+      <td>No</td>
+     </tr>
+     <tr>
+      <td>repeatDelay</td>
+      <td>Time to wait between performing operation</td>
+      <td>None</td>
+      <td>No</td>
+     </tr>
+     <tr>
+      <td>count</td>
+      <td>How many times send each message</td>
+      <td>1</td>
+      <td>No</td>
+     </tr>
+     <tr>
+      <td>sendDelay</td>
+      <td>Time to wait between message send operations</td>
+      <td>None</td>
+      <td>No</td>
+     </tr>
+   </table>
+   The TcpSend task should contain a list of TCP (CoesMI) messages to be sent.
+   <h2>Examples</h2>
+   <pre>
+      &lt;tcpServer id="TServer"
+                 type="transient" port="8765" host="localhost"
+                 loginTimeout="30" heartbeatInterval="30" /&gt;
+
+      &lt;tcpClient id="TClient"
+                 type="transient" port="8765" host="localhost"
+                 loginTimeout="30" heartbeatInterval="30"
+                 sessionID="TC1" /&gt;
+
+      &lt;tcpStart refid="TServer" /&gt;
+      &lt;tcpStart refid="TClient" /&gt;
+
+      &lt;sleep seconds="1"/&gt;
+
+      &lt;tcpSend refid="TServer" sessionID="TC1"&gt;
+        &lt;tcpMessage type="J"&gt;
+          &lt;field name="Symbol" value="EURUSD" /&gt;
+          &lt;field name="ExecReqID" value="1" /&gt;
+          &lt;field name="RejectReason" value="Just test" /&gt;
+        &lt;/tcpMessage&gt;
+        &lt;tcpMessage type="J"&gt;
+          &lt;field name="Symbol" value="EURCAD" /&gt;
+          &lt;field name="ExecReqID" value="2" /&gt;
+          &lt;field name="RejectReason" value="Just test number 2" /&gt;
+        &lt;/tcpMessage&gt;
+      &lt;/tcpSend&gt;
+      &lt;tcpSend refid="TClient"&gt;
+        &lt;tcpMessage type="J"&gt;
+          &lt;field name="Symbol" value="EURUSD" /&gt;
+          &lt;field name="ExecReqID" value="1" /&gt;
+          &lt;field name="RejectReason" value="Just test" /&gt;
+        &lt;/tcpMessage&gt;
+        &lt;tcpMessage type="J"&gt;
+          &lt;field name="Symbol" value="EURCAD" /&gt;
+          &lt;field name="ExecReqID" value="2" /&gt;
+          &lt;field name="RejectReason" value="Just test number 2" /&gt;
+        &lt;/tcpMessage&gt;
+      &lt;/tcpSend&gt;
+   </pre>
+  </body>
+</html>

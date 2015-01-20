@@ -1,0 +1,69 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>GuiLimit</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>GuiLimit</h1>
+   <h2>Description</h2>
+   <p>
+     GuiLimit task is intended to ensure that no more messages were received by the connection.
+     For example, if the client should not receive any messages during some period of time,
+     you can check it with GuiLimit task. If the message will be received during specified period of time,
+     task fails.
+   </p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>refid</td>
+     <td>Reference name of the connection to receive messages from.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>timeout</td>
+     <td>Number of seconds to wait for unexpected message</td>
+     <td>5</td>
+     <td>No</td>
+    </tr>
+   </table>
+   <h2>Examples</h2>
+   <pre>
+    &lt;property name="test.host" value="127.0.0.1" /&gt;
+    &lt;property name="test.port" value="8099" /&gt;
+
+    &lt;guiClient id="client" host="${test.host}" port="${test.port}"/&gt;
+    &lt;guiStart refid="client" /&gt;
+
+    &lt;guiLimit refid="client" timeout="10" /&gt;
+
+    &lt;guiStop refid="client" /&gt;
+
+   </pre>
+  </body>
+</html>

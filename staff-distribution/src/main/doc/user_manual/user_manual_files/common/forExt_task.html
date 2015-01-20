@@ -1,0 +1,93 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>forExt</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>forExt</h1>
+   <h2>Description</h2>
+   <p>forExt task extend standard Anr for task.</p>
+   <h2>Parameters</h2>
+   <table border="1" valign="top">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>from</td>
+     <td>Iterator low bound.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>to</td>
+     <td>Iterator high bound.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>step</td>
+     <td>Iterator step.</td>
+     <td>1</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>param</td>
+     <td>Iterator reference name to use inside the task. In order to refer the iterator inside the cycle use at symbol and param inside braces. In the example below <SPAN class="code">@{i}</SPAN> is used.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+   </table>
+<h2>Examples</h2>
+<pre>
+  &lt;forExt from="1" to="1000000" param="i"&gt;
+	&lt;sequential&gt;
+		&lt;java classname="Timestamp" outputproperty="OrderID@{i}" fork="false" /&gt;
+		&lt;java classname="Timestamp" outputproperty="TransactTime@{i}" fork="false" /&gt;
+		
+		&lt;tcpMessage type="D" id="NewOrderSingle"&gt;
+			&lt;field name="ClOrdID"/&gt;
+			&lt;field name="InstrumentID"/&gt;
+			&lt;field name="TransactTime"/&gt;
+			&lt;field name="OrderClass"/&gt;
+			&lt;field name="OrderType"/&gt;
+			&lt;field name="RfqID"/&gt;
+			&lt;field name="Side"/&gt;
+			&lt;field name="OrderQty"/&gt;
+			&lt;field name="HiddenQty"/&gt;
+			&lt;field name="Price"/&gt;
+			&lt;field name="TimeInForce"/&gt;
+			&lt;field name="ExpireTime"/&gt;
+			&lt;field name="AccountID"/&gt;
+			&lt;field name="UserID"/&gt;
+		&lt;/tcpMessage&gt;
+        
+		&lt;tcpReceive refid="ome" sessionID="${OME.SessionID}"  timeout="6000"&gt;
+			&lt;tcpMessage source="NewOrderSingle" /&gt;
+		&lt;/tcpReceive&gt;
+	&lt;/sequential&gt;
+&lt;/forExt&gt;
+</pre>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<project name="receive_custom_tag_existent.xml" default="all">
+	<dirname property="test.base.dir" file="${ant.file}" />
+	<import file="fix_common.xml" />
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
+
+	<!-- ================================================= -->
+	<target name="all" depends="clean, test, clean_all, clean">
+	</target>
+	<!-- ================================================= -->
+
+	<target name="clean">
+		<echo>Clearning log files...</echo>
+		<delete dir="${test.log.dir}" failonerror="false" />
+		<echo>Done</echo>
+	</target>
+
+	<target name="clean_all">
+		<echo>Stopping FIX Initiator...</echo>
+		<fixStop refid="main_initiator" />
+		<sleep seconds="1" />
+		<echo>Stopping FIX Acceptor...</echo>
+		<fixStop refid="main_acceptor" />
+		<sleep seconds="1" />
+	</target>
+
+	<target name="test">
+
+		<mkdir dir="${test.log.dir}" />
+
+		<echo>Creating FIX Initiator...</echo>
+		<fixInitiator settingsfile="${test.base.dir}/settings/FIXInitiator_new.properties"
+			id="main_initiator" />
+		<fixStart refid="main_initiator" />
+		<sleep seconds="1" />
+
+		<fixWaitForLogin refid="main_initiator" timeout="30" sender="TRGT" target="SNDR" type="FIX.4.4" />
+	</target>
+
+
+</project>

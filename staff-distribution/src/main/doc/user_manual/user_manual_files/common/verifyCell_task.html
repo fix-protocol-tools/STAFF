@@ -1,0 +1,71 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>verifyCell</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>verifyCell</h1>
+   <h2>Description</h2>
+   <p>verifyCell task compares DB field value with given values. Task fails if comparison result is false.</p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>raw</td>
+     <td>Number of raw in the result of SQL execution.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>field</td>
+     <td>Name of field to be verified.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>value</td>
+     <td>The value to compare with.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+   </table>
+<h2>Examples</h2>
+<pre>
+	&lt;sqlExt driver="com.jnetdirect.jsql.JSQLDriver"
+		url="jdbc:JSQLConnect://${DBHost}:1433/database=${DBName}"
+		userid="${DBUser}"
+		password="${DBPassword}"
+		query="select * from test_sqlExt order by id"&gt;
+	        &lt;verifyCell row = "1" field = "str_field" value = "str1"/&gt;
+        	&lt;verifyCell row = "2" field = "char_field" value = "2"/&gt;
+        	&lt;verifyCell row = "3" field = "date_field" value = "2008-11-27 18:23:43"/&gt;
+        	&lt;verifyCell row = "3" field = "decimal_field" value = "33.33"/&gt;
+        	&lt;verifyCell row = "4" field = "decimal_field" value = "-44.44"/&gt;
+	&lt;/sqlExt>
+</pre>
+  </body>
+</html>

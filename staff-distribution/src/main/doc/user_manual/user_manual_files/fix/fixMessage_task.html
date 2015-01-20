@@ -1,0 +1,196 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>fixMessage</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>fixMessage</h1>
+   <h2>Description</h2>
+   <p>fixMessage type represents a FIX message object.</p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>id</td>
+     <td>Reference name to use message with other tasks.</td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+    <tr>
+     <td>source</td>
+     <td>Reference name of the message specified earlier. </td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+    <tr>
+     <td>data</td>
+     <td>Raw FIX message data to be sent. Note the '/u0001' should be used as a delimiter instead of ASCII start of heading.</td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+   </table>
+   <h2>Nested Elements</h2>
+   <p><SPAN class="code">fixMessage</SPAN> supports nested elements <SPAN class="code">&lt;field&gt;</SPAN> and <SPAN class="code">&lt;group&gt;</SPAN>.</p>
+
+   <h3>field</h3>
+	<p><SPAN class="code">&lt;Field&gt;</SPAN> element represents fix message tag.</p>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td valign="top">name</td>
+     <td>Name of the FIX tag specified in the dictionary. Tag name and tag number can be used as a value. E.g. <SPAN class="code">MsgType (Tag = 35, Type: String)</SPAN> can be refered in 2 ways:<br>&lt;field name="MsgType" value="s"/&gt; or<br>&lt;field name="35" value="s"/&gt;.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>value</td>
+     <td>Field value. Can be refered in 2 ways:<br>&lt;field name="MsgType" value="s"/&gt; or<br>&lt;field name="35"&gt;s&lt;/field&gt;.</td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+    <tr>
+     <td>valueRegGxp</td>
+     <td>Use the value of field as pattern regular expression.</td>
+     <td>false</td>
+     <td>No</td>
+    </tr>
+   </table>
+   <p></p>
+   <h3>group</h3>
+   <p><SPAN class="code">&lt;Group&gt;</SPAN> element represents FIX message repeating group.</p>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>name</td>
+     <td>Name of the FIX repeating group specified in the dictionary. Repeating group name is a name or number of the leading tag of the repeating group.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+   </table>
+   <p><SPAN class="code">&lt;Group&gt;</SPAN> element supports <SPAN class="code">&lt;field&gt;</SPAN> and <SPAN class="code">&lt;group&gt;</SPAN> nested elements. Leading tag of the group is set automatically according to the number of specified groups.</p>
+<h2>Examples</h2>
+<h3>Receive FIX message </h3>
+<pre>
+	&lt;fixReceive refid="main_acceptor" timeout="20"&gt;
+		&lt;fixMessage&gt;
+			&lt;field name="35"&gt;6&lt;/field&gt;
+			&lt;field name="49"&gt;BLP&lt;/field&gt;
+			&lt;field name="56"&gt;TROIOI&lt;/field&gt;
+			&lt;field name="34"&gt;2&lt;/field&gt;
+			&lt;field name="23"&gt;636&lt;/field&gt;
+			&lt;field name="28"&gt;N&lt;/field&gt;
+			&lt;field name="55"&gt;BWERT&lt;/field&gt;
+			&lt;field name="54"&gt;1&lt;/field&gt;
+			&lt;field name="27"&gt;M&lt;/field&gt;
+			&lt;field name="130"&gt;N&lt;/field&gt;
+		&lt;/fixMessage&gt;
+	&lt;/fixReceive&gt;
+</pre>
+<h3>Receive FIX message using regular expression</h3>
+<pre>
+	&lt;echo&gt;Sending message&lt;/echo&gt;
+	&lt;fixSend refid="main_initiator" repeat="1" count="1" repeatDelay="0" sendDelay="0" sender="TROIOI" target="BLP" type="FIX.4.0" &gt;
+		&lt;fixMessage&gt;
+			&lt;field name="35" value="6" /&gt;
+			&lt;field name="34" value="2" /&gt;
+			&lt;field name="23" value="636" /&gt;
+			&lt;field name="28" value="N" /&gt;
+			&lt;field name="55" value="BWERT" /&gt;
+			&lt;field name="54" value="1" /&gt;
+			&lt;field name="27" value="M" /v
+			&lt;field name="58" value="aaaaaaaaaaab"/&gt;
+			&lt;field name="130" value="N" /&gt;
+		&lt;/fixMessage>
+	&lt;/fixSend>
+	&lt;echo&gt;Waiting for message to be received...&lt;/echo&gt;
+	&lt;fixReceive refid="main_acceptor" timeout="20" repeat="1" count="1" sender="TROIOI" target="BLP" type="FIX.4.0" &gt;
+		&lt;fixMessage&gt;
+			&lt;field name="35" value="6" /&gt;
+			&lt;field name="58" value="a*b" valueRegGxp="true"/&gt;
+		&lt;/fixMessage&gt;
+	&lt;/fixReceive&gt;
+</pre>
+<h3>Send FIX message with repeating group </h3>
+<pre>
+	&lt;fixSend refid="main_initiator" sender="TROIOI" target="BLP" type="FIX.4.2" repeat="1" count="1" repeatDelay="0" sendDelay="0"&gt;
+		&lt;fixMessage&gt;
+			&lt;field name="MsgType" value="C" /&gt;
+			&lt;field name="164" value="11" /&gt;	
+			&lt;field name="94" value="0" /&gt;	
+			&lt;field name="147" value="[NOTE] TROIOI:BLP Established" /&gt;	
+			&lt;group name="LinesOfText"&gt;
+				&lt;field name="58" value="N" /&gt;				
+			&lt;/group&gt;
+			&lt;group name="LinesOfText"&gt;
+				&lt;field name="58" value="1" /&gt;	
+			&lt;/group&gt;
+			&lt;group name="LinesOfText"&gt;
+				&lt;field name="58" value="Established" /&gt;	
+			&lt;/group&gt;
+			&lt;group name="LinesOfText"&gt;
+				&lt;field name="58" value="TROIOI:BLP" /&gt;	
+			&lt;/group&gt;
+		&lt;/fixMessage&gt;
+	&lt;/fixSend&gt;
+</pre>
+<h3>Send raw FIX message</h3>
+<pre>
+	&lt;fixSend refid="main_initiator" sender="BLP" target="TROIOI" type="FIX.4.2" repeat="1" count="1" repeatDelay="0" sendDelay="0"&gt;
+		&lt;fixMessage data="8=FIX.4.2/u00019=89/u000135=6/u000149=BLP/u000156=TROIOI/u000134=2/u000152=20081118-16:27:00.319/u000123=636/u000128=N/u000155=BWERT/u000154=1/u000127=M/u0001130=N/u000110=232/u0001"/&gt;
+	&lt;/fixSend&gt;
+</pre>
+<h3>Receive FIX message specified earlier</h3>
+<pre>
+	&lt;fixMessage id="IOI"&gt;
+			&lt;field name="35" value="6" /&gt;	
+			&lt;field name="49" value="BLP" /&gt;
+			&lt;field name="56" value="TROIOI" /&gt;
+			&lt;field name="34" value="2" /&gt;
+			&lt;field name="23" value="636" /&gt;
+			&lt;field name="28" value="N" /&gt;
+			&lt;field name="55" value="BWERT" /&gt;
+			&lt;field name="54" value="1" /&gt;
+			&lt;field name="27" value="M" /&gt;
+			&lt;field name="130" value="N" /&gt;
+	&lt;/fixMessage&gt;
+	&lt;fixReceive refid="main_acceptor" timeout="20" repeat="1" count="1" sender="TROIOI" target="BLP" type="FIX.4.2" strictOrdering="false"&gt;
+		&lt;fixMessage source="IOI" /&gt;
+	&lt;/fixReceive&gt;
+</pre>
+
+  </body>
+</html>

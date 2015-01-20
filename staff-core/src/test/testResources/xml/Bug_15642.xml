@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<project name="fix_bug_15642" default="test">
+    <dirname property="test.base.dir" file="${ant.file}"/>
+    <import file="fix_common.xml"/>
+    <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+
+
+    <property name="test.log.dir" value="${test.base.dir}/log"/>
+
+    <target name="test" depends="clean">
+        <mkdir dir="${test.log.dir}"/>
+
+        <echo>Creating FIX Initiator...</echo>
+        <fixInitiator settingsfile="${test.base.dir}/settings/FIXInitiator_15642.properties" id="main_initiator" />
+        <fixStart refid="main_initiator" />
+        <sleep seconds="1" />
+
+        <echo>Creating FIX Aceptor...</echo>
+        <fixAcceptor settingsfile="${test.base.dir}/settings/FIXAcceptor_15642.properties" id="main_acceptor" />
+        <fixStart refid="main_acceptor" />
+        <sleep seconds="1" />
+
+        <echo>Waiting for initiator to establish connection...</echo>
+        <fixWaitForLogin refid="main_initiator" timeout="10"/>
+
+        <tstamp>
+            <format property="new_order_trn_time" pattern="yyyyMMdd-hh:mm:ss.SSS" locale="en,US" offset="-5"
+                    unit="hour"/>
+        </tstamp>
+
+        <echo>Creating New Order Single request...</echo>
+        <fixMessage id="new_order_single">
+            <field name="MsgType" value="D"/>
+            <field name="HandlInst" value="1"/>
+            <field name="Symbol" value="ZXZZT"/>
+            <field name="Side" value="1"/>
+            <field name="OrderQty" value="20000"/>
+            <field name="OrdType" value="2"/>
+            <field name="ClOrdID" value="Order#1"/>
+            <field name="Price" value="34.7"/>
+            <field name="TransactTime" value="${new_order_trn_time}"/>
+        </fixMessage>
+
+        <echo>Sending message as raw with SeqNum 2</echo>
+        <fixSend refid="main_initiator" repeat="1" count="1" repeatDelay="0"
+                 sendDelay="0" validateOutgoing="false">
+            <fixMessage
+                    data="8=FIX.4.2/u00019=144/u000135=X/u000134=7/u000149=TRGT_15642/u000152=20101223-22:00:27.301/u000156=SNDR_15642/u0001268=2/u0001279=0/u0001269=3/u000155=CSCO/u0001270=34.7/u0001271=190/u0001279=0/u0001269=3/u000155=ZVZZT/u0001270=34.6/u0001271=250/u000110=001/u0001"/>
+                    <!--data="8=FIX.4.2/u00019=132/u000135=X/u000134=6/u000149=TRGT/u000152=20101223-16:30:08.709/u000156=SNDR/u0001268=2/u0001279=0/u0001269=3/u000155=CSCO/u0001270=34.7/u0001271=190/u0001279=0/u0001269=3/u000155=ZVZZT/u0001270=34.6/u0001271=250/u000110=076/u0001"/>-->
+        </fixSend>
+
+        <echo>Waiting for message type 'X' with SeqNum 2 to be received...</echo>
+        <fixReceive refid="main_acceptor"
+                    timeout="10" repeat="1" count="1"
+                    validateIncoming="false"
+                    strictOrdering="true">
+            <fixMessage>
+                <field name="35" value="X" />
+                <field name="34" value="2" />
+            </fixMessage>
+        </fixReceive>
+
+        <echo>Sending New Order Single requests as fix message</echo>
+        <fixSend refid="main_initiator" repeat="1" count="1" repeatDelay="0"
+                 sendDelay="0">
+            <fixMessage source="new_order_single"/>
+        </fixSend>
+
+        <echo>Waiting for New Order Single with SeqNum 3 to be received...</echo>
+        <fixReceive refid="main_acceptor" timeout="10" repeat="1" count="1">
+            <fixMessage>
+                <field name="35" value="D" />
+                <field name="34" value="3" />
+            </fixMessage>
+        </fixReceive>
+
+    </target>
+
+    <target name="clean_all">
+        <echo>Stopping FIX Initiator...</echo>
+        <fixStop refid="main_initiator" />
+        <sleep seconds="1" />
+
+        <echo>Stopping FIX Acceptor...</echo>
+        <fixStop refid="main_acceptor" />
+        <sleep seconds="1" />
+    </target>
+
+    <target name="clean">
+        <echo>Clearning log files...</echo>
+        <delete dir="${test.log.dir}" failonerror="false" />
+        <echo>Done</echo>
+    </target>
+
+</project>

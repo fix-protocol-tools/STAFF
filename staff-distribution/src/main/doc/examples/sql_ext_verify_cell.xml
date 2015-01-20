@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--
+$Revision: 1.1 $
+Author: Yulia Zihanhirova (ymz@btobits.com)
+-->
+
+<project name="sql_ext_verify_cell" default="test">
+    <dirname property="base.dir" file="${ant.file}"/>
+    <import file="${base.dir}/fix_common.xml"/>
+    <!-- ========================================================-->
+
+    <target name="test">
+        <description>
+            Note: in order to run test you need to install SQL Native Client driver.
+            \\10.17.11.197\Testing\STAFF\sqlncli.msi
+            The test selects data from the DB and performs validation.
+        </description>
+
+        <sqlExt driver="com.jnetdirect.jsql.JSQLDriver"
+                url="jdbc:JSQLConnect://${DBHost}:1433/database=${DBName}"
+                userid="${DBUser}"
+                password="${DBPassword}"
+                query="select * from test_sqlExt order by id">
+            <verifyCell row="1" field="str_field" value="str1"/>
+            <verifyCell row="2" field="char_field" value="2"/>
+            <verifyCell row="3" field="date_field" value="2008-11-27 18:23:43"/>
+            <verifyCell row="3" field="decimal_field" value="33.33"/>
+            <verifyCell row="4" field="decimal_field" value="-44.44"/>
+        </sqlExt>
+    </target>
+    <!-- ======================================================== -->
+</project>

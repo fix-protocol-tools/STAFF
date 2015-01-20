@@ -1,0 +1,56 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>fixDisconnectExpect</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>fixDisconnectValidate</h1>
+   <h2>Description</h2>
+   <p>fixDisconnectValidate task checks disconnect signal (if arrived) or wait time left from timeout - (current time - listener install time).
+       This task using together with the <a href="fixDisconnectExpect_task.html" target="mainFrame">fixDisconnectExpect</a> task</p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>refid</td>
+     <td>Reference name of the fixDisconnectExpect task.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+   </table>
+<h2>Examples</h2>
+<pre>
+    &lt;!-- install listener --&gt;
+    &lt;fixDisconnectExpect id="disconnect" refid="main_acceptor" timeout="30"/&gt;
+    &lt;!-- do any operation --&gt;
+    &lt;fixStop refid="main_acceptor"/&gt;
+    &lt;echo&gt;Wait for disconnect...&lt;/echo&gt;
+    &lt;!-- check disconnect signal (if arrived) or wait time left from timeout - (current time - listener install time) --&gt;
+    &lt;fixDisconnectValidate refid="disconnect"/&gt;
+</pre>
+</body>
+</html>

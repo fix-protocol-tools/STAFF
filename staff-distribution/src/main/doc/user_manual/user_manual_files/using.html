@@ -1,0 +1,265 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+<head>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css">
+</head>
+
+<body class="verd">
+
+<h1><a name="top">Using STAFF</a></h1>
+<ul>
+<!--	
+	<li><a href="#tcp">TCP Tasks and Types</a></li>
+	<li><a href="#tcp_simple">Simple TCP Tasks and Types</a></li>
+	<li><a href="#gui">GUI Tasks and Types</a></li>
+-->
+	<li><a href="#fix">FIX Tasks and Types</a></li>
+	<li><a href="#smtp">SMTP Tasks and Types</a></li>
+	<li><a href="#common">Common Tasks and Types</a></li>
+</ul>
+<p><br></p>
+<hr>
+
+<p>You should be familiar with Ant to use STAFF. If not, please read <a href="http://ant.apache.org/manual/index.html">Ant Documentation</a> first. See also <a href="http://ant.apache.org/faq.html">Ant Frequently Asked Questions</a>.</p>
+<p>The following tables provide a short description of each data type and task and a link to the complete documentation.</p>
+<p><br></p>
+
+<h2><a name="fix">FIX Tasks and Types</a></h2>
+<table width="100%" border="1">
+<tr valign="top">
+<td width="10%" class="title">Task Name</td>
+<td width="90%" class="title">Description</td>
+</tr>
+<tr valign="top"><td><a href="fix/fixBlock_task.html">Block</a></td><td>Task specify a set of FIX fields with values. </td></tr>
+<tr valign="top"><td><a href="fix/fixAcceptor_task.html">fixAcceptor</a></td><td>Type represents a FIX acceptor</td></tr>
+<tr valign="top"><td><a href="fix/fixDisconnectExpect_task.html">fixDisconnectExpect</a></td><td>Task starts listen disconnect event.</td></tr>
+<tr valign="top"><td><a href="fix/fixDisconnectValidate_task.html">fixDisconnectValidate</a></td><td>Task checks disconnect signal (if arrived) or wait time left from timeout - (current time - listener install time).</td></tr>
+<tr valign="top"><td><a href="fix/fixExecutor_task.html">fixExecutor</a></td><td>Type represents a simple FIX executor.</td></tr>
+<tr valign="top"><td><a href="fix/fixField_task.html">fixField</a></td><td>Task accesses FIX message field. FIX groups are also supported.</td></tr>
+<tr valign="top"><td><a href="fix/fixFilterFixIn_task.html">fixFilterFixIn</a></td><td>Task intercept incoming messages.</td></tr>
+<tr valign="top"><td><a href="fix/fixFilterFixOut_task.html">fixFilterFixOut</a></td><td>Task intercept outgoing messages.</td></tr>
+<tr valign="top"><td><a href="fix/fixFilterRule_task.html">fixFilterRule</a></td><td>Test rule of filter.</td></tr>
+<tr valign="top"><td><a href="fix/fixInitiator_task.html">fixInitiator</a></td><td>Type represents a FIX initiator.</td></tr>
+<tr valign="top"><td><a href="fix/fixLimit_task.html">fixLimit</a></td><td>Task is intended to ensure that no more messages were received by the FIX session. For example, if the session should not receive any messages during some period of time, you can check it with fixLimit task. If the message will be received during specified period of time, task fails.</td></tr>
+<tr valign="top"><td><a href="fix/fixMessage_task.html">fixMessage</a></td><td>Type represents a FIX message object.</td></tr>
+<tr valign="top"><td><a href="fix/fixReceive_task.html">fixReceive</a></td><td>Task receives FIX message from the session. Message verification including FIX fields and groups is supported.</td></tr>
+<tr valign="top"><td><a href="fix/fixSend_task.html">fixSend</a></td><td>Task sends FIX message to the session.</td></tr>
+<tr valign="top"><td><a href="fix/fixSequenceReset_task.html">fixSequenceReset</a></td><td>Task sends Sequence Reset message in reset mode to the FIX Peer.</td></tr>
+<tr valign="top"><td><a href="fix/fixStart_task.html">fixStart</a></td><td>Task starts FIX initiator, acceptor or executor.</td></tr>
+<tr valign="top"><td><a href="fix/fixStop_task.html">fixStop</a></td><td>Task stops FIX initiator, acceptor or executor.</td></tr>
+<tr valign="top"><td><a href="fix/fixWaitForLogin_task.html">fixWaitForLogin</a></td><td>Task waits for FIX session establishment.</td></tr>
+<tr valign="top"><td><a href="fix/setControlLevel_task.html">setControlLevel</a></td><td>Task switchs level of messages controlled (Application/Session).</td></tr>
+</table>
+<p><br></p>
+<div class="toc"><a href="#top">Top</a></div>
+<p><hr></p>
+
+<h2><a name="smtp">SMTP Tasks and Types</a></h2>
+<table width="100%" border="1">
+<tr valign="top">
+<td width="10%" class="title">Task Name</td>
+<td width="90%" class="title">Description</td>
+</tr>
+<tr valign="top">
+<td><a href="smtp/smtpAcceptor_task.html">smtpAcceptor</a></td>
+<td>Represents simple SMTP server. The tag has "configurationDirectory" parameter, that should contain path, absolute or relative, to the directory containing mail.conf, user.conf files. User.conf shouldn't be changed, mail.conf can be changed if necessary.</td>
+</tr>
+<tr valign="top">
+<td><a href="smtp/smtpMessage_task.html">smtpMessage</a></td>
+<td>Type represents a SMTP message object.</td>
+</tr>
+<tr valign="top">
+<td><a href="smtp/smtpReceive_task.html">smtpReceive</a></td>
+<td>Task receives SMTP message. Message verification is supported.</td>
+</tr>
+<tr valign="top">
+<td><a href="smtp/smtpStart_task.html">smtpStart</a></td>
+<td>Task starts SMTP acceptor.</td>
+</tr>
+<tr valign="top">
+<td><a href="smtp/smtpStop_task.html">smtpStop</a></td>
+<td>Task stops SMTP acceptor.</td>
+</tr>
+</table>
+<p><br></p>
+<div class="toc"><a href="#top">Top</a></div>
+<p><hr></p>
+
+<h2><a name="common">Common Tasks and Types</a></h2>
+<table width="100%" border="1" valign="top">
+<tr valign="top">
+<td width="10%" class="title">Task Name</td>
+<td width="90%" class="title">Description</td>
+</tr>
+<tr valign="top"><td><a href="common/forExt_task.html">forExt</a></td><td>Task extends standard Ant &lt;for&gt; task.</td>
+<tr valign="top"><td><a href="common/random_task.html">random</a></td><td>Generates random number of specified type from the specified interval.</td>
+<tr valign="top"><td><a href="common/sqlExt_task.html">sqlExt</a></td><td>Task represent connection to DB.</td>
+<tr valign="top"><td><a href="common/timestamp_task.html">Timestamp</a></td><td>Timestamp task generates 13 digits ESTTimestamp - count of milliseconds since the epoch (in UTC). The epoch is January 1st of 1970.</td>
+<tr valign="top"><td><a href="common/verifyCell_task.html">verifyCell</a></td><td>Task verifies DB field value.</td>
+</tr>
+</table>
+<p><br></p>
+<div class="toc"><a href="#top">Top</a></div>
+
+<!--
+<h2><a name="tcp">TCP Tasks and Types</a></h2>
+<p></p>
+<table width="100%" border="1">
+<tr valign="top">
+<td width="10%" class="title">Task Name</td>
+<td width="90%" class="title">Description</td>
+</tr>
+<tr valign="top">
+<td><a href="tcp/tcpclient_task.html">tcpClient(deprecated)</a></td>
+<td>Type represents transient or persistent TCP client session.</td>
+</tr>
+<tr valign="top">
+<td><a href="tcp/tcpconfig_task.html">tcpConfig(deprecated)</a></td>
+<td>Task is intended for TCP transport environment configuration. As long as Ant and all its tasks are implemented in Java language, TCP transport tasks are implemented using jTcpTransport project. This task should be used if you want to specify custom configuration file and/or library name to use. It is recommended to configure TCP transport before executing other task, otherwise the configuration will take no effect.
+</td>
+</tr>
+<tr valign="top">
+<td><a href="tcp/tcpgetentriesnum_task.html">tcpGetEntriesNum(deprecated)</a></td>
+<td>Task extracts number of entities in the specified group from the TCP message and puts its value to the Ant property.
+</td>
+</tr>
+<tr valign="top">
+<td><a href="tcp/tcpgetfield_task.html">tcpGetField(deprecated)</a></td>
+<td>Task extracts field from the TCP message and puts its value to the Ant property.
+</td>
+</tr>
+<tr valign="top">
+<td><a href="tcp/tcplimit_task.html">tcpLimit(deprecated)</a></td>
+<td>Task is intended to ensure that no more messages were received by the TCP session. For example, if the session should not receive any messages during some period of time, you can check it with TcpLimit task. If the message will be received during specified period of time, task fails.</td>
+</tr>
+<tr valign="top">
+<td><a href="tcp/tcpreceive_task.html">tcpReceive(deprecated)</a></td>
+<td>Task receives and compares a set of messages from the TCP session.
+    If number of received messages is less than expected, task fails.
+    If one of the field of one of the message is not equal to expected, task fails.
+</td>
+</tr>
+<tr valign="top">
+<td><a href="tcp/tcpmessage_task.html">tcpMessage(deprecated)</a></td>
+<td>Type represents an ITCH message object.</td>
+</tr>
+<tr valign="top">
+<td><a href="tcp/tcpsend_task.html">tcpSend(deprecated)</a></td>
+<td>Task sends a set of messages to the TCP session.</td>
+</tr>
+<tr valign="top">
+<td><a href="tcp/tcpserver_task.html">tcpServer(deprecated)</a></td>
+<td>Type represents transient or persistent TCP server session.</td>
+</tr>
+<tr valign="top">
+<td><a href="tcp/tcpsetfield_task.html">tcpSetField(deprecated)</a></td>
+<td>Task assigns value to the TCP message field.</td>
+</tr>
+<tr valign="top">
+<td><a href="tcp/tcpstart_task.html">tcpStart(deprecated)</a></td>
+<td>Task starts the TCP session if it was not yet started.</td>
+</tr>
+<tr valign="top">
+<td><a href="tcp/tcpstop_task.html">tcpStop(deprecated)</a></td>
+<td>Task stops the TCP session if it was not yet stopped.</td>
+</tr>
+</table>
+<p><br></p>
+<div class="toc"><a href="#top">Top</a></div>
+<p><hr></p>
+
+<h2><a name="tcp_simple">Simple TCP Tasks and Types</a></h2>
+<table width="100%" border="1">
+<tr valign="top">
+<td width="10%" class="title">Task Name</td>
+<td width="90%" class="title">Description</td>
+</tr>
+<tr valign="top">
+<td><a href="tcpSimple/tcpSimpleClient_task.html">tcpSimpleClient(deprecated)</a></td>
+<td>Type represents simple TCP client.</td>
+</tr>
+<tr valign="top">
+<td><a href="tcpSimple/tcpSimpleReceive_task.html">tcpSimpleReceive(deprecated)</a></td>
+<td>Task receives and compares a data from the TCP session. If no data received task fails. If received data does not correspond specified patter task fails.</td>
+</tr>
+<tr valign="top">
+<td><a href="tcpSimple/tcpSimpleSend_task.html">tcpSimpleSend(deprecated)</a></td>
+<td>Task sends portions of data from the file to the TCP session.</td>
+</tr>
+<tr valign="top">
+<td><a href="tcpSimple/tcpSimpleServer_task.html">tcpSimpleServer(deprecated)</a></td>
+<td>Type represents TCP server session.</td>
+</tr>
+</table>
+<p><br></p>
+<div class="toc"><a href="#top">Top</a></div>
+<p><hr></p>
+
+<h2><a name="gui">GUI Tasks and Types</a></h2>
+<table width="100%" border="1">
+<tr valign="top">
+<td width="10%" class="title">Task Name</td>
+<td width="90%" class="title">Description</td>
+</tr>
+<tr valign="top">
+<td><a href="gui/guiclient_task.html">guiClient</a></td>
+<td>Type represents Gui client session.</td>
+</tr>
+<tr valign="top">
+<td><a href="gui/guigetfield_task.html">GuiGetField</a></td>
+<td>Task extracts field from the message and puts its value to the Ant property.</td>
+</tr>
+<tr valign="top">
+<td><a href="gui/guilimit_task.html">GuiLimit</a></td>
+<td>Task is intended to ensure that no more messages were received by the connection.
+     For example, if the client should not receive any messages during some period of time,
+     you can check it with GuiLimit task. If the message will be received during specified period of time,
+     task fails.</td>
+</tr>
+<tr valign="top">
+<td><a href="gui/guireceive_task.html">GuiReceive</a></td>
+<td>Task receives and compares a set of messages from the connection.
+    If number of received messages is less than expected, task fails.
+    If one of the field of one of the message is not equal to expected, task fails.</td>
+</tr>
+<tr valign="top">
+<td><a href="gui/guisend_task.html">GuiSend</a></td>
+<td>Task sends a set of messages to the connection.</td>
+</tr>
+<tr valign="top">
+<td><a href="gui/guisetfield_task.html">GuiSetField</a></td>
+<td>Task assigns value to the message field.</td>
+</tr>
+<tr valign="top">
+<td><a href="gui/guistart_task.html">GuiStart</a></td>
+<td>Task opens gui client connection if it was not yet started.</td>
+</tr>
+<tr valign="top">
+<td><a href="gui/guistop_task.html">GuiStop</a></td>
+<td>Task stops the gui client if it was not yet stopped.</td>
+</tr>
+</table>
+<p><br></p>
+<div class="toc"><a href="#top">Top</a></div>
+<p><hr></p>
+-->
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>fixExecutor</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>fixExecutor</h1>
+   <h2>Description</h2>
+   <p>fixExecutor type represents a simple FIX executor.</p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>id</td>
+     <td>Reference name to use FIX Executor with other tasks.</td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+    <tr>
+     <td>settingsfile</td>
+     <td><a href="FIXAcceptor_properties.html">FIX Executor (Acceptor) configuration file</a> name.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+   </table>
+<h2>Examples</h2>
+<pre>
+	&lt;fixExecutor settingsfile="${fix_common.settings.dir}/FIXAcceptor.properties" id="simple_executor"/&gt;
+</pre>
+  </body>
+</html>

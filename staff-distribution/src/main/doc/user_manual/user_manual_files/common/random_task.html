@@ -1,0 +1,82 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>random</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>random</h1>
+   <h2>Description</h2>
+   <p>Generates random number of specified type from the specified interval.</p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+	<tr>
+     <td>min</td>
+     <td>Interval low bound.</td>
+     <td>0</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>max</td>
+     <td>Interval high bound.</td>
+     <td>1</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>type</td>
+     <td>Result number type. Possible values: <br>int<br>double</td>
+     <td>double</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>fraction</td>
+     <td>Count of decimal digits in the double result number.</td>
+     <td>8</td>
+     <td>No</td>
+    </tr>
+    <tr>
+     <td>property</td>
+     <td>The property to receive generated number.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+   </table>
+<h2>Examples</h2>
+<h3>Generate integer number and store to the <SPAN class="code">Qty</SPAN> property:</h3>
+<pre>
+	&lt;random min="1" max="100" type="int" property="Qty"/&gt;
+</pre>
+<h3>Generate real number with 8 digits in fractional part and store to the <SPAN class="code">Px</SPAN> property:</h3>
+<pre>	
+	&lt;random min="1" max="100" type="double" property="Px"/&gt; 
+</pre>	
+<h3>Generate real number with 4 digits in fractional part and store to the <SPAN class="code">Px4</SPAN> property:</h3>
+<pre>	
+	&lt;random min="1" max="100" type="double" property="Px4" fraction="4"/&gt;
+</pre>	
+</body>
+</html>

@@ -1,0 +1,239 @@
+---
+--- Software Testing Automation Framework for FIX
+---
+
+[!] Important
+[+] New
+[-] Fixed error
+[*] Changes
+[^] Notes
+
+---------------------------------------------------------------
+ Staff 0.3.9 (APR 16, 2014 6:00 PM)
+---------------------------------------------------------------
+[-] Bug BBP-2111: Sometime STAFF can't receive incoming message(Logout message)
+
+---------------------------------------------------------------
+ Staff 0.3.8 (DEC 16, 2013 6:00 PM)
+---------------------------------------------------------------
+[*] Update QuickFIX/J to version 1.5.3
+[+] Ability to set field value in next way: <field name="58">BWERT</field>
+
+---------------------------------------------------------------
+ Staff 0.3.7 (OCT 09, 2012 6:00 PM)
+---------------------------------------------------------------
+[-] Bug 17901 - Ant libs used in STAFF distribution need to be added/updated
+[-] Bug 17993 - We need possibility to create session of FIX50 or higher
+[-] Bug 17883 - Logs are not released after fixStop command
+[*] Update QuickFIX/J to version 1.5.1
+
+---------------------------------------------------------------
+ Staff 0.3.6 (JUL 06, 2012 6:00 PM)
+---------------------------------------------------------------
+[*] Added 'nullable' parameter to FixFieldTask for 'get' action.
+[-] Bug 17888 - Looks like <random> task works incorrectly for double numbers
+
+---------------------------------------------------------------
+ Staff 0.3.5 (JUN 17, 2011 6:00 PM)
+---------------------------------------------------------------
+[-] Bug 17173 - [STAFF]: STAFF resends a duplicate message.
+[*] Revert Staff ITCH Module(tcp tasks)
+[-] Bug 17106 - Problem: failed to create task or type tcpConfig
+[-] Bug 17048 - [STAFF]: Cannot specify header tags for sequence reset message
+
+---------------------------------------------------------------
+ Staff 0.3.4 (FEB 02, 2011 6:00 PM)
+---------------------------------------------------------------
+[+] Added ability use data attribute of fixMessage in fixFilterAction
+[+] Added task 'fixSequenceReset' -  send Sequence Reset message and apply
+    newSeqNum as current "out" seqNum
+[-] Bug 16561: Please add all new features and changes to STAFF User Guide.
+[+] Added ability to simultaneously run any number of initiators/acceptors sessions
+
+---------------------------------------------------------------
+ Staff 0.3.3 (JAN 21, 2011 2:00 PM)
+---------------------------------------------------------------
+[-] Bug 16557: fixStop task does not send Logout message when terminate session
+[-] Bug 16567: When use fixFilterRule for replacing Logon message,
+    it cannot be sent with tag#141=Y and MsgSeqNum=1. STAFF storage is not cleaned as well.
+
+---------------------------------------------------------------
+ Staff 0.3.2 (JAN 19, 2011 2:00 PM)
+---------------------------------------------------------------
+[-] Removed validation of conformity attributes acceptor/initiator sessions
+
+---------------------------------------------------------------
+ Staff 0.3.1 (JAN 17, 2011 2:00 PM)
+---------------------------------------------------------------
+[-] Fix bug 16143:We need possibility to check received messages
+    of session level also, everything except Heartbeat (0)
+[+] Added task 'setControlLevel' - switch receive level messages
+[+] Added task 'fixDisconnectExpect' - start listen disconnect event
+[+] Added task 'fixDisconnectValidate' - check disconnect signal (if arrived)
+    or wait time left from timeout
+[+] Added the possibility of use the value of field as pattern regular expression
+[*] Rename attribute of task fixSend 'addHeaderTrailer' to 'fillHeaderTrailer'.
+    Changed possible values of 'fillHeaderTrailer' to: full, onlyReq, none
+
+---------------------------------------------------------------
+ Staff 0.3.0.1 (DEC 28, 2010 2:00 PM)
+---------------------------------------------------------------
+[+] Add fix filter
+[-] Fix bug 15642: It looks like for fixSend task with raw data message sender and target are mixed
+
+---------------------------------------------------------------
+ Staff 0.2.5 (SEP 14, 2010 2:00 PM)
+---------------------------------------------------------------
+[-] Bug 15844: fixLimit tsk works incorrectly.
+
+---------------------------------------------------------------
+ Staff 0.2.4 (JUL 07, 2010 2:00 PM)
+---------------------------------------------------------------
+[-] tcpReciveTask & tcpGetField tasks fix
+
+---------------------------------------------------------------
+ Staff 0.2.3 (JUL 02, 2010 2:00 PM)
+---------------------------------------------------------------
+[-] Missing libraries added to the distribution  
+
+---------------------------------------------------------------
+ Staff 0.2.2 (JUN 30, 2010 2:00 PM)
+---------------------------------------------------------------
+[-] Bug 15642: It looks like for fixSend task with raw data message sender and target are mixed.
+
+---------------------------------------------------------------
+ Staff 0.2.1 (JUN 16, 2010 2:00 PM)
+---------------------------------------------------------------
+[+] Bug 15632: New: We need possibility to custom Logon message, which is sent automatically
+[!] Parameters Username and Password should be added to the [DEFAULT] section of FIX configuration file
+
+---------------------------------------------------------------
+ Staff 0.2.0 (APR 28, 2010 6:00 PM)
+---------------------------------------------------------------
+[+] Support for nested groups in ITCH message added
+[*] Bug 15097: <groupentry> nested element dosn't support <group> nested element.
+
+---------------------------------------------------------------
+ Staff 0.1.9 (AUG 06, 2009 12:00 PM)
+---------------------------------------------------------------
+[+] Added custom sample.
+[-] Fix bug 12290: FIX message raw should have header/trailer auto replace functionality.
+[-] Fix bug 12266: simpleTCP Receive timeout parameter should be added.
+[-] Fix bug 12249: tcpSimpleClient Receive: The input stream is closed before logout message is fullt sent.
+[-] Fix bug 8348: Add FollowOrder attribute to tcpReceive task.
+
+---------------------------------------------------------------
+ Staff 0.1.8 (FEB 15, 2009 10:30)
+---------------------------------------------------------------
+[-] Fixed bug #12239.
+
+---------------------------------------------------------------
+ Staff 0.1.7 (FEB 12, 2009 19:00)
+---------------------------------------------------------------
+[-] Now all recieved strings are trimmed before being compared.
+
+---------------------------------------------------------------
+ Staff 0.1.5 (FEB 04, 2009 19:00)
+---------------------------------------------------------------
+[-] Fixed bug on <tcpField>, now task can compare values with NULL.
+
+---------------------------------------------------------------
+ Staff 0.1.4 (FEB 03, 2009 14:50)
+---------------------------------------------------------------
+[-] Fixed bug on <sqlExt>, now results et is scrolable.
+
+---------------------------------------------------------------
+ Staff 0.1.3 (JAN 20, 2009 10:00)
+---------------------------------------------------------------
+[-] Fixed bugz #12060 and #12061.
+
+---------------------------------------------------------------
+ Staff 0.1.2 (JAN 15, 2009 14:00)
+---------------------------------------------------------------
+[*] Add new jTransport library.
+
+---------------------------------------------------------------
+ Staff 0.1.1 (JAN 09, 2009 14:00)
+---------------------------------------------------------------
+[-] Bugs in <fixField> are fixed, now it has possibility to set and get fields of <fixMessage> type.
+
+---------------------------------------------------------------
+ Staff 0.1.0 (JAN 01, 2009 11:00 AM)
+---------------------------------------------------------------
+[-] Fix bugs #11935, #11936.
+
+---------------------------------------------------------------
+ Staff 0.0.21 (DEC 25, 2008 13:30 PM)
+---------------------------------------------------------------
+[-] Fix bugs on <tcpSimpleClient>, <tcpSimpleServer>, <tcpSimpleSend>, <tcpSimpleReceive> task.
+
+---------------------------------------------------------------
+ Staff 0.0.20 (DEC 19, 2008 16:00 PM)
+---------------------------------------------------------------
+[+] Add <tcpGetEntriesNum>, to get a number group entries.
+
+---------------------------------------------------------------
+ Staff 0.0.18 (DEC 10, 2008 16:00 PM)
+---------------------------------------------------------------
+[+] Add to <tcpMessage> groupentry field.
+[+] Add <random> task.
+
+---------------------------------------------------------------
+ Staff 0.0.14 (DEC 01, 2008 16:00 PM)
+---------------------------------------------------------------
+[*] Parameter pattern is added to <tcpSimpleReceive>, which can contains RegExp expression.
+[*] Log4j was added to <tcpSimpleReceive>, <tcpSimpleReceive>.
+
+---------------------------------------------------------------
+ Staff 0.0.12 (NOV 28, 2008 10:00 AM)
+---------------------------------------------------------------
+[+] Add <tcpSimpleClient>, <tcpSimpleServer>, <tcpSimpleSend>, <tcpSimpleReceive> to work with tcp layer.
+[+] Add <block> task.
+
+---------------------------------------------------------------
+ Staff 0.0.10 (NOV 25, 2008 12:00 AM)
+---------------------------------------------------------------
+[+] Add <sqlExt>, <verifyCell>, to work with DB layer.
+
+---------------------------------------------------------------
+ Staff 0.0.7 (NOV 20, 2008 10:00 AM)
+---------------------------------------------------------------
+[+] Add <smtpAcceptor>, <smtpReceive>, to work with SMTP email messages
+
+---------------------------------------------------------------
+ Staff 0.0.6 (NOV 18, 2008 16:00 PM)
+---------------------------------------------------------------
+[*] Changed field validation.
+[^] Parameter checkGroupOrder of <fixRecive> is replased with strictOrdering.
+[^] In tag <fixMessage>, parameter data, symbol <SOH> must be replaced by /u0001.
+
+---------------------------------------------------------------
+ Staff 0.0.5 (NOV 17, 2008 10:00 AM)
+---------------------------------------------------------------
+[*] Changed field validation.
+[+] Parameter validateOutgoing is added to the <fixSend> Task.
+[+] Parameter validateIncoming is added to the <fixRecive> Task.
+[+] Parameter checkGroupOrder is added to the <fixRecive> Task. Default value is FALSE.
+[+] Parameter data now is added to <fixMessage>. It could contain raw message data.
+[+] Parameter file is added to the <fixSend> Task.
+
+---------------------------------------------------------------
+ Staff 0.0.4 (JAN 22, 2008 10:30 AM)
+---------------------------------------------------------------
+[-] Error with acceptor restart fixed.
+
+---------------------------------------------------------------
+ Staff 0.0.3 (JAN 22, 2008 10:20 AM)
+---------------------------------------------------------------
+[*] Acceptor now sill force disconnect on stop.
+
+---------------------------------------------------------------
+ Staff 0.0.2 (JAN 21, 2008 07:00 PM)
+---------------------------------------------------------------
+[+] Ability to specify tag by number added.
+[+] Ability to use custom tags added.
+
+---------------------------------------------------------------
+ Staff 0.0.1 (DEC 31, 2007 08:00 AM)
+---------------------------------------------------------------
+[^] Initial revision.

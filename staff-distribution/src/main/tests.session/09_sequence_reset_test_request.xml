@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<project name="09_sequence_reset_test_request.xml" default="all">
+    <dirname property="test.base.dir" file="${ant.file}"/>
+    <import file="${test.base.dir}\common\fix_common.xml"/>
+    <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+    <property name="test.log.dir" value="${test.base.dir}/log"/>
+
+    <!-- ================================================= -->
+    <target name="all" depends="clean, init, test, stop">
+    </target>
+    <!-- ================================================= -->
+
+    <target name="init">
+        <mkdir dir="${test.log.dir}"/>
+
+        <echo>Creating FIX Initiator...</echo>
+        <fixInitiator settingsfile="${test.base.dir}/settings/FIXInitiator.properties" id="main_initiator"/>
+
+        <echo>Creating FIX Aceptor...</echo>
+        <fixAcceptor settingsfile="${test.base.dir}/settings/FIXAcceptor.properties" id="main_acceptor"/>
+
+        <echo>Creating INITIATOR filter...</echo>
+        <!-- fix message object will income to filter -->
+        <fixFilterFixOut refid="main_initiator" id="ini_fix_out" active="true" debug="true"/>
+
+        <echo>Start initiator session...</echo>
+        <fixStart refid="main_initiator"/>
+        <sleep seconds="1"/>
+
+        <echo>Start acceptor session...</echo>
+        <fixStart refid="main_acceptor"/>
+        <sleep seconds="1"/>
+
+        <echo>Wait for login...</echo>
+        <fixWaitForLogin refid="main_initiator" timeout="30"/>
+
+    </target>
+
+    <target name="stop">
+        <echo>Stopping FIX Initiator...</echo>
+        <fixStop refid="main_initiator"/>
+        <sleep seconds="1"/>
+        <echo>Stopping FIX Acceptor...</echo>
+        <fixStop refid="main_acceptor"/>
+        <sleep seconds="1"/>
+    </target>
+
+    <target name="test">
+        <description>
+            9) Session established between STAFF and counterparty (logon exchange was successful);
+            STAFF sends sequence reset (35=4 reset, 123 = N) with next seq +10 to current;
+            STAFF sends test request (35=1) with correct outgoing seq num (current+10);
+            STAFF should receive heartbeat (35=0) (test request ack);
+        </description>
+
+        <echo>Creating filter out rule with action replaced message on Test Request </echo>
+        <fixFilterRule refid="ini_fix_out" active="true">
+            <fixFilterMatchField tag="35" value="1" condition="equals" req="true"/>
+            <fixFilterAction operation="replace">
+                <fixMessage>
+                    <field name="MsgType" value="1"/>
+                    <field name="34" value="25"/>
+                    <field name="112" value="123456789"/>
+                </fixMessage>
+            </fixFilterAction>
+        </fixFilterRule>
+
+        <echo>Send sequence reset (35=4 gap fill, 123 = Y) with seq num too high (34> then actual)</echo>
+        <fixSend refid="main_initiator" repeat="1" count="1">
+            <fixMessage>
+                <field name="MsgType" value="4"/>
+                <field name="36" value="25"/>
+                <field name="123" value="Y"/>
+            </fixMessage>
+        </fixSend>
+
+        <echo>Change message control level to Session level</echo>
+        <setControlLevel refid="main_initiator" controlLevel="session"/>
+
+        <echo>Send Test Request which will be replaced by filter on Test Request with seq num too high (34> then actual)</echo>
+        <fixSend refid="main_initiator" repeat="1" count="1">
+            <fixMessage>
+                <field name="MsgType" value="1"/>
+            </fixMessage>
+        </fixSend>
+
+        <echo>Waiting for Heartbeat message with 112="123456789" to be received...</echo>
+        <fixReceive refid="main_initiator" timeout="10" repeat="1" count="1">
+            <fixMessage>
+                <field name="MsgType" value="0"/>
+                <field name="112" value="123456789"/>
+            </fixMessage>
+        </fixReceive>
+
+    </target>
+
+</project>

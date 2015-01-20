@@ -1,0 +1,173 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>FIX Initiator properties file</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+
+<body class="verd">
+   <h1>FIX Initiator properties file</h1>
+   <h2>Description</h2>
+	<p>The file is used to specify FIX Initiator properties.</p>
+	   <h2>Parameters</h2>
+   <table border="1" valign="top">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+    </tr>
+    <tr>
+     <td>FileLogPath<br>FileStorePath</td>
+     <td>Directory to store FIX logs files.</td>
+    </tr>
+    <tr>
+     <td>ConnectionType</td>
+     <td>Connection type. Should be set to "initiator".</td>
+    </tr>
+    <tr>
+     <td>StartTime</td>
+     <td>Session start time.</td>
+    </tr>
+    <tr>
+     <td>EndTime</td>
+     <td>Session terminate time.</td>
+    </tr>
+    <tr>
+     <td>BeginString</td>
+     <td>FIX protocol version for the session.</td>
+    </tr>
+    <tr>
+     <td>SenderCompID</td>
+     <td>Assigned value used to identify firm sending message. SenderCompID of initiator should be equal to the TargetCompID of acceptor.</td>
+    </tr>
+    <tr>
+     <td>TargetCompID</td>
+     <td>Assigned value used to identify receiving firm. TargetCompID of initiator should be equal to the SenderCompID of acceptor.</td>
+    </tr>
+    <tr>
+     <td>HeartBtInt</td>
+     <td>Heart beat interval in seconds.</td>
+    </tr>
+    <tr>
+     <td>ReconnectInterval</td>
+     <td>Count of seconds between reconnect tries.</td>
+    </tr>
+    <tr>
+     <td>SocketConnectPort</td>
+     <td>Port for initiator to connect to. This value should be equal to the acceptor's SocketAcceptPort.</td>
+    </tr>
+    <tr>
+     <td>SocketConnectHost</td>
+     <td>Host for initiator to connect to. This value should be equal to the acceptor's SocketAcceptPort.</td>
+    </tr>
+    <tr>
+     <td>LogoutTimeout</td>
+     <td>Number of seconds to wait for a logout response before disconnecting. By default 2 seconds</td>
+    </tr>
+    <tr>
+     <td>SessionQualifier</td>
+     <td>Additional qualifier to disambiguate otherwise identical sessions. This can only be used with initiator sessions.</td>
+    </tr>
+       <td>DataDictionary</td>
+       <td>Path to FIX Dictionary file to be used to for sent / validate received messages.<br/>
+           This setting should only be used with FIX transport versions old than FIXT 1.1.
+           See TransportDataDictionary and ApplicationDataDictionary for FIXT 1.1 settings.</td>
+      </tr>
+      <tr>
+      <td>DefaultApplVerID</td>
+      <td>Required only for FIXT 1.1 (and newer). Ignored for earlier transport versions.<br>
+          Specifies the default application version ID for the session. This can either be the ApplVerID enum (see the ApplVerID field) or the beginString for the default version.</td>
+      </tr>
+      <tr>
+        <td>TransportDataDictionary</td>
+        <td>XML definition file for validating admin (transport) messages.
+            This setting is only valid for the FIXT 1.1 (or newer) sessions.<br/>
+            See DataDictionary for older transport versions (FIX 4.0-4.4) and for additional information.</td>
+      </tr>
+      <tr>
+        <td>AppDataDictionary</td>
+        <td>XML definition file for validating application messages. This setting is only valid for the FIXT 1.1 (or newer) sessions.<br/>
+            See DataDictionary for older transport versions (FIX 4.0-4.4) and for additional information.<br/><br/>
+
+            This setting supports the possibility of a custom application data dictionary for each session.
+            This setting would only be used with FIXT 1.1 and new transport protocols.
+            This setting can be used as a prefix to specify multiple application dictionaries for the FIXT transport.<br/>
+            For example:<br/><br/>
+
+                  DefaultApplVerID=FIX.4.2<br/>
+                  # For default application version ID<br/>
+                  AppDataDictionary=FIX42.xml<br/>
+                  # For nondefault application version ID<br/>
+                  # Use beginString suffix for app version<br/>
+                  AppDataDictionary.FIX.4.4=FIX44.xml<br/><br/>
+
+            This would use FIX42.xml for the default application version ID and FIX44.xml for any FIX 4.4 messages.</td>
+      </tr>
+   </table>
+<p>Note: please do not change other values of the configuration files.</p>
+<p>Refer <a href="http://www.quickfixj.org/quickfixj/usermanual/1.5.1/usage/configuration.html">QuickFIX/J User Manual</a> for more information.</p>
+
+<h2>Examples</h2>
+<pre>
+#
+# FIX.4.2 Initiator Configuration
+#
+
+[DEFAULT]
+FileLogPath=./log
+FileStorePath=./log
+HttpAcceptPort=6891
+SocketAcceptPort=6523
+SocketReuseAddress=Y
+
+[SESSION]
+ConnectionType=initiator
+StartTime=00:00:01
+EndTime=23:59:00
+BeginString=FIX.4.2
+SenderCompID=TRGT
+TargetCompID=SNDR
+HeartBtInt=30
+ReconnectInterval=1
+SocketConnectPort=8225
+SocketConnectHost=127.0.0.1
+DataDictionary=./settings/dictionary/FIX42.xml
+
+#
+# FIX.5.0 Initiator Configuration
+#
+[SESSION]
+ConnectionType=initiator
+StartTime=00:00:01
+EndTime=23:59:00
+BeginString=FIXT.1.1
+SenderCompID=TRGT50
+TargetCompID=SNDR50
+HeartBtInt=30
+ReconnectInterval=1
+SocketConnectPort=8225
+SocketConnectHost=127.0.0.1
+DefaultApplVerID=FIX.5.0
+#All standard dictionaries already in classpath with the QuickFIX library.
+AppDataDictionary=FIX50.xml
+TransportDataDictionary=FIXT11.xml
+</pre>
+  </body>
+</html>

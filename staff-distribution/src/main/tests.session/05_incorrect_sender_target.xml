@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<project name="01_high_seq_num.xml" default="all">
+    <dirname property="test.base.dir" file="${ant.file}"/>
+    <import file="${test.base.dir}\common\fix_common.xml"/>
+    <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+    <property name="test.log.dir" value="${test.base.dir}/log"/>
+
+    <!-- ================================================= -->
+    <target name="all" depends="clean, init, test, stop">
+    </target>
+    <!-- ================================================= -->
+
+    <target name="init">
+        <mkdir dir="${test.log.dir}"/>
+
+        <echo>Creating FIX Initiator...</echo>
+        <fixInitiator settingsfile="${test.base.dir}/settings/FIXInitiator.properties" id="main_initiator"/>
+
+        <echo>Creating FIX Aceptor...</echo>
+        <fixAcceptor settingsfile="${test.base.dir}/settings/FIXAcceptor.properties" id="main_acceptor"/>
+
+        <echo>Start initiator session...</echo>
+        <fixStart refid="main_initiator"/>
+        <sleep seconds="1"/>
+
+        <echo>Start acceptor session...</echo>
+        <fixStart refid="main_acceptor"/>
+        <sleep seconds="1"/>
+
+        <echo>Wait for login...</echo>
+        <fixWaitForLogin refid="main_initiator" timeout="30"/>
+
+    </target>
+
+    <target name="stop">
+        <echo>Stopping FIX Initiator...</echo>
+        <fixStop refid="main_initiator"/>
+        <sleep seconds="1"/>
+        <echo>Stopping FIX Acceptor...</echo>
+        <fixStop refid="main_acceptor"/>
+        <sleep seconds="1"/>
+    </target>
+
+    <target name="test">
+        <description>
+            Session established between STAFF and counterparty (logon exchange was successful);
+            STAFF sends Application Level message with incorrect SenderCompID/TargetCompID (that differs from the one sent in logon);
+            STAFF should receive reject message (35=3);
+            The counterparty should increase incoming seq num; (we do not check this via STAFF, this is simply information)
+            STAFF should receive logout with correct reason text (tag 58);
+            STAFF should send logout in response to the logout received;
+            STAFF should detect that counterparty closed connection (disconnect);
+
+        </description>
+
+
+        <echo>Change message control level to Session level</echo>
+        <setControlLevel refid="main_initiator" controlLevel="session"/>
+
+        <echo>Disconnect counterparty session state start monitoring</echo>
+        <fixDisconnectExpect id="disconnect" refid="main_acceptor" timeout="10"/>
+
+        <echo>Send messages with incorrect BeginString ("8=FIX.1.0")...</echo>
+        <fixSend refid="main_initiator" repeat="1" count="1">
+            <fixMessage data="8=FIX.4.4/u00019=100/u000135=C/u000134=2/u000149=TRGT2/u000152=20101230-14:30:48.474/u000156=SNDR2/u000194=0/u0001147=Test e-mail/u0001164=123456/u000133=1/u000158=Line 1/u000110=250/u0001" />
+        </fixSend>
+
+        <echo>Waiting for reject message (35=3) to be received...</echo>
+        <fixReceive refid="main_initiator" timeout="10" repeat="1" count="1">
+            <fixMessage>
+                <field name="MsgType" value="3"/>
+                <field name="58" value="CompID problem"/>
+            </fixMessage>
+        </fixReceive>
+
+        <echo>Waiting for logout to be received...</echo>
+        <fixReceive refid="main_initiator" timeout="10" repeat="1" count="1">
+            <fixMessage>
+                <field name="MsgType" value="5"/>
+                <!--FIXME: quickfix sends logout without reason-->
+                <!--<field name="58" value="correct reason text"/>-->
+            </fixMessage>
+        </fixReceive>
+
+        <echo>Start waiting disconnect STAFF session</echo>
+        <fixDisconnectValidate refid="disconnect"/>
+
+        <echo>Done</echo>
+    </target>
+
+</project>

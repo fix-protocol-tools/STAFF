@@ -1,0 +1,191 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses />.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.epam.b2bits.staff</groupId>
+        <artifactId>staff</artifactId>
+        <version>0.3.11-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>staff-distribution</artifactId>
+    <version>0.3.11-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Staff Distribution POM Module</name>
+    <inceptionYear>2010</inceptionYear>
+    <description>
+        Software Testing Automation Framework for FIX Distribution
+    </description>
+
+    <properties>
+        <distribution.classifier>bin</distribution.classifier>
+        <!--<assembly.dir>-->
+            <!--${project.build.directory}/${project.build.finalName}-${distribution.classifier}/${project.build.finalName}-->
+        <!--</assembly.dir>-->
+        <!--<main.basedir>${project.parent.parent.basedir}</main.basedir>-->
+    </properties>
+
+    <scm>
+        <connection>scm:svn:https://svnsaratov.epam.com/epm-bfix/trunk/Staff_3_0/staff-distribution</connection>
+        <developerConnection>scm:svn:https://svnsaratov.epam.com/epm-bfix/trunk/Staff_3_0/staff-distribution</developerConnection>
+        <url>https://svnsaratov.epam.com/epm-bfix/trunk/Staff_3_0/staff-distribution</url>
+    </scm>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.epam.b2bits.staff</groupId>
+            <artifactId>staff-ant-annotations</artifactId>
+            <version>0.3.11-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.epam.b2bits.staff</groupId>
+            <artifactId>staff-core</artifactId>
+            <version>0.3.11-SNAPSHOT</version>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.epam.b2bits.staff</groupId>-->
+            <!--<artifactId>staff-mail</artifactId>-->
+            <!--<version>0.3.10-SNAPSHOT</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.epam.b2bits.staff</groupId>-->
+            <!--<artifactId>staff-quickfix</artifactId>-->
+            <!--<version>0.3.10-SNAPSHOT</version>-->
+        <!--</dependency>-->
+        <!--
+          <dependency>
+              <groupId>${groupId}</groupId>
+              <artifactId>staff-faj</artifactId>
+          </dependency>
+          -->
+          <!--<dependency>-->
+              <!--<groupId>com.epam.b2bits.staff</groupId>-->
+              <!--<artifactId>staff-itch</artifactId>-->
+              <!--<version>0.3.10-SNAPSHOT</version>-->
+          <!--</dependency>-->
+        <dependency>
+            <groupId>com.epam.b2bits.staff</groupId>
+            <artifactId>staff-ant-utils</artifactId>
+            <version>0.3.11-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <!--<plugin>-->
+                <!--<artifactId>maven-resources-plugin</artifactId>-->
+                <!--<version>2.4.3</version>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>mkDeployment</id>-->
+                        <!--&lt;!&ndash; here the phase you need &ndash;&gt;-->
+                        <!--<phase>package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>copy-resources</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<outputDirectory>${project.build.directory}/deploy</outputDirectory>-->
+                            <!--<includeEmptyDirs>true</includeEmptyDirs>-->
+                            <!--<overwrite>false</overwrite>-->
+                            <!--<resources>-->
+                                <!--<resource>-->
+                                    <!--<directory>target/${project.artifactId}-${project.version}-${distribution.classifier}</directory>-->
+                                    <!--<excludes>-->
+                                        <!--<exclude>STAFF/lib/*.*</exclude>-->
+                                    <!--</excludes>-->
+                                    <!--<includes>-->
+                                        <!--<include>**/*.*</include>-->
+                                    <!--</includes>-->
+                                <!--</resource>-->
+                            <!--</resources>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>mkDeploymentLib</id>-->
+                        <!--&lt;!&ndash; here the phase you need &ndash;&gt;-->
+                        <!--<phase>package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>copy-resources</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<outputDirectory>${project.build.directory}/deploy/STAFF</outputDirectory>-->
+                            <!--<includeEmptyDirs>true</includeEmptyDirs>-->
+                            <!--<overwrite>true</overwrite>-->
+                            <!--<resources>-->
+                                <!--<resource>-->
+                                    <!--<directory>target/${project.artifactId}-${project.version}-${distribution.classifier}/STAFF</directory>-->
+                                    <!--<includes>-->
+                                        <!--<include>lib/*.*</include>-->
+                                    <!--</includes>-->
+                                <!--</resource>-->
+                            <!--</resources>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <!--<goal>directory-single</goal>-->
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <!--<attach>false</attach>-->
+                            <descriptors>
+                                <descriptor>src/main/assembly/bin.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-installed-binaries</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>${project.artifactId}</artifactId>
+                                    <version>${project.version}</version>
+                                    <classifier>bin</classifier>
+                                    <type>zip</type>
+                                    <destFileName>staff-distribution-${project.version}-bin.zip</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${distribution.url}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+        </plugins>
+    </build>
+</project>

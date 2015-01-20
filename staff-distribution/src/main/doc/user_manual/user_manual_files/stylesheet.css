@@ -1,0 +1,46 @@
+/*
+  * Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+ *
+ * This file is part of STAFF.
+ *
+ * STAFF is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * STAFF is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+p { text-indent: 18pt; text-align: left }
+h1 { font-size: 14pt }		
+h2 { font-size: 11pt }
+h3 { font-size: 10pt }		
+h4 { font-size: 9pt }				
+h5 { font-size: 8pt }				
+div.title { font-size: 16pt; font-weight: bold; text-align: center }
+div.revision { font-size: 10pt; font-style: italic; text-align: center }  
+div.auth { font-size: 9pt; text-align: center } 
+div.copy { font-size: 8pt; text-align: center } 		
+div.toc { font-size: 10pt; text-align: right }
+body.verd { font-family: Verdana; font-size: 10pt }
+td.title { font-size: 10pt; font-weight: bold; text-align: center } 
+td.name { font-size: 10pt; font-style: italic } 		
+td { font-size: 10pt } 
+li { font-size: 10pt }
+SPAN.qst { font-size: 10pt; font-style: italic; color: green }
+SPAN.tst_group { text-indent: 18pt; font-size: 10pt; font-weight: bold; font-style: italic } 				
+SPAN.note { font-size: 10pt; font-style: italic }
+SPAN.definition { font-size: 10pt; font-style: italic; font-weight: bold }
+SPAN.winname { font-size: 10pt; font-style: italic }
+SPAN.contrname { font-size: 10pt; font-style: italic }
+SPAN.filename { font-size: 10pt; font-style: italic }
+SPAN.hotkey { font-size: 10pt; font-style: italic; font-weight: bold }
+SPAN.menu { font-size: 9pt; font-style: italic; }
+SPAN.code { font-size: 10pt; font-style: italic }
+SPAN.green { color: green }

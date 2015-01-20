@@ -1,0 +1,144 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+<head>
+	<title>FAQ</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css">
+</head>
+
+<body class="verd">
+
+
+<h1><a name="top">Frequently Asked Questions - FAQ</a></h1>
+<ul>
+<li><a href="#faq1">Can I use custom FIX dictionary?</a></li>
+<li><a href="#faq2">Can I get current time in my test?</a></li>
+<li><a href="#faq3">Can I send custom FIX message using STAFF?</a></li>
+<li><a href="#faq4">Can I store received value of the tag and use it in my message?</a></li>
+<li><a href="#faq5">Can I hold up execution of my test for a specified period of time?</a></li>
+<li><a href="#faq6">Can I hold up execution of my test till the key is pressed?</a></li>
+<li><a href="#faq7">Can I stop execution of my test if an error received?</a></li>
+<li><a href="#faq8">Can I compare a field / tag value with constant/ given pattern?</a></li>
+<li><a href="#faq9">Can I check number of entries in group without checking the contents?</a></li>
+<li><a href="#faq10">Can I check session-level message?</a></li>
+<li><a href="#faq11">Can I check whether some tag is absent in the message?</a></li>
+<li><a href="#faq12">Can I check whether some property is set or not?</a></li>
+</ul>
+<p><br></p>
+<hr>
+
+<h2><a name="faq1">Can I use custom FIX dictionary?</a></h2>
+<p>In order to use custom FIX dictionary you should made necessary changes in the standard dictionary or create your own dictionary and then specify its name in the <SPAN class="code">DataDictionary</SPAN> property of the <a href="fix/fixAcceptor_properties.html">FIX Acceptor configuration file</a> or <a href="fix/fixInitiator_properties.html">FIX Initiator configuration file</a>.</p>
+<div class="toc"><a href="#top">Top</a></div>
+
+<h2><a name="faq2">Can I get current time in my test?</a></h2>
+<p>In order to get current time use <a href="common/timestamp_task.html">Timestamp</a> task.</p>
+<div class="toc"><a href="#top">Top</a></div>
+
+<h2><a name="faq3">Can I send custom FIX message using STAFF?</a></h2>
+<p>TBD</p>
+<div class="toc"><a href="#top">Top</a></div>
+
+<h2><a name="faq4">Can I store received value of the tag and use it in my message?</a></h2>
+<p>Yes, you can. In order to store and reuse tag value you need: </p>
+<ul>
+	<li>store received message with some id;</li>
+	<li>get value of the field you need and store it to some variable/property;</li>
+	<li>analyse value of the property: if it is empty, tag is absent.</li>
+</ul>
+<p>See <a href="fix\fixField_task.html#get">fixField</a> task for code example and further details.</p>	
+<div class="toc"><a href="#top">Top</a></div>
+
+<h2><a name="faq5">Can I hold up execution of my test for a specified period of time?</a></h2>
+<p>A task for sleeping a short period of time useful when a build or deployment process requires an interval between tasks. n order to hold up execution of test use <a href="http://ant.apache.org/manual/Tasks/sleep.html">Sleep</a> Ant task.</p>
+<div class="toc"><a href="#top">Top</a></div>
+
+<h2><a name="faq6">Can I hold up execution of my test till the key is pressed?</a></h2>
+<p>In order to stop test execution and wait for some user action use <a href="http://ant.apache.org/manual/Tasks/input.html">Input</a> Ant task.</p>
+<div class="toc"><a href="#top">Top</a></div>
+
+<h2><a name="faq7">Can I stop execution of my test if an error received?</a></h2>
+<p>The build fails if any of tasks fails. You can make build fail conditionally using <a href="http://ant.apache.org/manual/Tasks/fail.html">Fail</a> Ant task.</p>
+<div class="toc"><a href="#top">Top</a></div>
+
+<h2><a name="faq8">Can I compare a field / tag value with constant/ given pattern?</a></h2>
+<p>You can compare value of the field / tag with constant in several ways.  </p>
+<div class="toc"><a href="#top">Top</a></div>
+
+<h2><a name="faq9">Can I check number of entries in group without checking the contents?</a></h2>
+<p>Yes. Use <a href="./fix/fixField_task.html#getGroupCount">getGroupCount</a> action of <a href="./fix/fixField_task.html">fixField</a> task. </p>
+<div class="toc"><a href="#top">Top</a></div>
+
+<h2><a name="faq10">Can I check session-level message?</a></h2>
+<p>You can check session-lavel messages by setting control level for the session. For furter details see <a href="fix/setControlLevel_task.html">setControlLevel</a> task.</p>
+<div class="toc"><a href="#top">Top</a></div>
+
+<h2><a name="faq11">Can I check whether some tag is absent in the message?</a></h2>
+<p>Yes, you can. In order to check tag absence you need:</p>
+<ul>
+	<li>store received message with some id;</li>
+	<li>get value of the field you need to check and store it to some variable/property, <span class="code">nullable="true"</span> should be used;</li>
+	<li>use the property to refer stored value.</li>
+</ul>
+<p>See code below as an example. Also see <a href="fix\fixField_task.html">fixField</a> task for further details.</p>	
+<pre>
+	&lt;fixReceive refid="initiator1" timeout="10" &gt;
+		&lt;fixMessage id="new_order_single_received" /&gt;
+	&lt;/fixMessage&gt;
+	&lt;var name="SymbolSfx_received" value=""/&gt;
+	&lt;fixField refid="new_order_single_received" action="get" name="SymbolSfx" property="SymbolSfx_received" nullable="true"/&gt;	
+	&lt;if&gt;	
+		&lt;equals arg1="${SymbolSfx_received}" arg2="" /&gt;	
+		&lt;then&gt;	
+			&lt;echo message="SymbolSfx (65) is removed from the message" /&gt;	
+		&lt;/then&gt;	
+		&lt;else&gt;	
+			&lt;fail>SymbolSfx (65) is not removed during MoveField action..&lt;/fail&gt;	
+		&lt;/else&gt;
+	&lt;/if&gt;
+</pre>
+<div class="toc"><a href="#top">Top</a></div>
+
+<h2><a name="faq12">Can I check whether some property is set or not?</a></h2>
+<p>Such check can be done with <span class=code>isset</span> condition. See code below as an example. Also see <a href="http://ant.apache.org/manual/Tasks/conditions.html">Conditions</a> description for further details.</p>	
+	
+	
+<pre>
+	&lt;loadfile property="smtplog.exists" srcfile="${fixedge_root}/FixEdge1/log/FixEdge.log"&gt;        
+		&lt;filterchain&gt;         
+			&lt;linecontainsregexp&gt;            
+				&lt;regexp pattern="Message received by adaptor:"/&gt;          
+			&lt;/linecontainsregexp&gt;        
+		&lt;/filterchain&gt;     
+	&lt;/loadfile&gt;      
+	&lt;if&gt;
+		<span class=green>&lt;isset property="smtplog.exists"/&gt;</span>
+		&lt;then&gt;
+			&lt;echo message="Message 'to client TestSMTPClient' has been recorded to FixEdge.log" /&gt;
+		&lt;/then&gt;
+		&lt;else&gt;
+			&lt;fail&gt;SMTP adapter was not sent the email message!!!&lt;/fail&gt;
+		&lt;/else&gt;
+	&lt;/if&gt;
+</pre>
+<div class="toc"><a href="#top">Top</a></div>
+
+</body>
+</html>

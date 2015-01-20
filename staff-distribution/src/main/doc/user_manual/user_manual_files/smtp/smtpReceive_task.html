@@ -1,0 +1,59 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>smtpReceive</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>smtpReceive</h1>
+   <h2>Description</h2>
+   <p>smtpReceive task receives and compares �� �-���� ������� from the SMTP session with given pattern. If the message is not equal to expected, task fails.</p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>timeout</td>
+     <td>Number of seconds to wait for the message.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+   </table>
+<h2>Examples</h2>
+<pre>
+	&lt;smtpReceive timeout="60"&gt;
+		&lt;smtpMessage id="msg"&gt;
+			&lt;field name="From" value="bbb@localhost" /&gt;
+			&lt;field name="To"   value="aaa@localhost" /&gt;    
+			&lt;field name="Subject" value="[NOTE] TROIOI:BLP Established" /&gt;
+			&lt;group name="Data"&gt;
+				&lt;field name="1" value="N"/&gt;
+				&lt;field name="2" value="1"/&gt;
+			&lt;/group&gt;
+		&lt;/smtpMessage&gt;
+	&lt;/smtpReceive&gt;
+</pre>
+  </body>
+</html>

@@ -1,0 +1,80 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>fixDisconnectExpect</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>fixDisconnectExpect</h1>
+   <h2>Description</h2>
+   <p>fixDisconnectExpect task starts listen disconnect event. This task using together with the
+       <a href="fixDisconnectValidate_task.html" target="mainFrame">fixDisconnectValidate</a> task</p>
+   <h2>Parameters</h2>
+   <table border="1">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>refid</td>
+     <td>Reference name of the FIX Peer.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+    <tr>
+     <td>sender</td>
+     <td>Deprecated. FIX Session SenderCompID.</td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+    <tr>
+     <td>target</td>
+     <td>Deprecated. FIX Session TargetCompID.</td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+    <tr>
+     <td>type</td>
+     <td>Deprecated. Session'sFIX Protocol version.</td>
+     <td>None</td>
+     <td>No</td>
+    </tr>
+    <tr>
+     <td>timeout</td>
+     <td>Number of seconds to wait for disconnect.</td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+   </table>
+<h2>Examples</h2>
+<pre>
+    &lt;!-- install listener --&gt;
+    &lt;fixDisconnectExpect id="disconnect" refid="main_acceptor" timeout="30"/&gt;
+    &lt;!-- do any operation --&gt;
+    &lt;fixStop refid="main_acceptor"/&gt;
+    &lt;echo&gt;Wait for disconnect...&lt;/echo&gt;
+    &lt;!-- check disconnect signal (if arrived) or wait time left from timeout - (current time - listener install time) --&gt;
+    &lt;fixDisconnectValidate refid="disconnect"/&gt;
+</pre>
+</body>
+</html>

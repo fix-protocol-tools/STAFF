@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<project name="session_disconnect.xml" default="all">
+    <dirname property="test.base.dir" file="${ant.file}"/>
+    <import file="${test.base.dir}\common\fix_common.xml"/>
+    <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+    <property name="test.log.dir" value="${test.base.dir}/log"/>
+
+    <!-- ================================================= -->
+    <target name="all" depends="clean, init, test, stop"/>
+    <!-- ================================================= -->
+
+    <target name="init">
+        <mkdir dir="${test.log.dir}"/>
+
+        <echo>Creating FIX Initiator...</echo>
+        <fixInitiator settingsfile="${test.base.dir}/settings/FIXInitiator.properties" id="main_initiator"/>
+
+        <echo>Creating FIX Aceptor...</echo>
+        <fixAcceptor settingsfile="${test.base.dir}/settings/FIXAcceptor.properties" id="main_acceptor"/>
+
+        <echo>Start initiator session...</echo>
+        <fixStart refid="main_initiator"/>
+        <sleep seconds="1"/>
+
+        <echo>Start acceptor session...</echo>
+        <fixStart refid="main_acceptor"/>
+        <sleep seconds="1"/>
+
+    </target>
+
+    <target name="test">
+	<!-- install listener -->
+	<fixDisconnectExpect id="disconnect" refid="main_acceptor" timeout="30"/>
+	<!-- do any operation -->
+	<fixStop refid="main_acceptor"/>
+	<echo>Wait for disconnect...</echo>
+	<!-- check disconnect signal (if arrived) or wait time left from timeout - (current time - listener install time) -->
+	<fixDisconnectValidate refid="disconnect"/>
+	<echo>Disconnect wait done</echo>
+    </target>
+
+    <target name="stop">
+        <echo>Stopping FIX Initiator...</echo>
+        <fixStop refid="main_initiator"/>
+        <sleep seconds="1"/>
+        <echo>Stopping FIX Acceptor...</echo>
+        <fixStop refid="main_acceptor"/>
+        <sleep seconds="1"/>
+    </target>
+
+</project>

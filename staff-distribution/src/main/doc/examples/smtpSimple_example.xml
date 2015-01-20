@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<project name="smtpSimple_example.xml" default="all">
+    <dirname property="base.dir" file="${ant.file}"/>
+    <import file="${base.dir}/fix_common.xml"/>
+    <!-- ========================================================== -->
+
+    <target name="all" depends="clean, init, test, stop">
+    </target>
+    <!-- ========================================================== -->
+
+    <target name="init">
+        <echo>Clearning log files...</echo>
+        <mkdir dir="${test.log.dir}"/>
+
+        <echo>Starting...</echo>
+        <echo>Create smtpAcceptor...</echo>
+        <smtpAcceptor configurationDirectory="${fix_common.settings.dir}" id="smtp_server"/>
+
+        <echo>Create fixAcceptor...</echo>
+        <fixAcceptor settingsfile="${fix_common.settings.dir}/FIXAcceptorEmail.properties" id="main_acceptor"/>
+
+        <echo>Starting FE...</echo>
+        <exec dir="C:\B2BITS\FIXEdge.2.0\bin" executable="C:\B2BITS\FIXEdge.2.0\bin\FixEdge3.service.stop.bat"
+              spawn="true"></exec>
+        <sleep seconds="2"/>
+        <exec dir="C:\B2BITS\FIXEdge.2.0\bin" executable="C:\B2BITS\FIXEdge.2.0\bin\FixEdge3.clean.bat"
+              spawn="true"></exec>
+        <sleep seconds="2"/>
+        <exec dir="C:\B2BITS\FIXEdge.2.0\bin" executable="C:\B2BITS\FIXEdge.2.0\bin\FixEdge3.service.run.bat"
+              spawn="true"></exec>
+        <sleep seconds="5"/>
+        <smtpStart refid="smtp_server"/>
+        <fixStart refid="main_acceptor"/>
+
+        <fixWaitForLogin refid="main_acceptor" timeout="30"/>
+    </target>
+    <!-- ========================================================== -->
+
+    <target name="stop">
+        <echo>Stopping...</echo>
+        <smtpStop refid="smtp_server"/>
+        <fixStop refid="main_acceptor"/>
+        <exec dir="C:\B2BITS\FIXEdge.2.0\bin" executable="C:\B2BITS\FIXEdge.2.0\bin\FixEdge3.service.stop.bat"
+              spawn="true"></exec>
+        <sleep seconds="2"/>
+    </target>
+    <!-- ========================================================== -->
+
+    <target name="test">
+
+        <description>
+            Note - in order to run the test you need FixEdge with SMTP adaptor installed. Change Path in the test if
+            necessary.
+            Send Email to the smtpAcceptor and check its contents:
+            1) Configurate FIX Edge SMTP adaptor to send message to the localhost:25
+            2) Configurate BL to send emails from the SNDR:TRGT session to the localhost:25 mail server
+            3) Run FE with smtp adaptor
+            4) Run smtpAcceptor
+            5) Send email to FE
+            Expected:
+            -- the email is received by smtpAcceptor
+        </description>
+
+        <fixMessage id="C">
+            <field name="MsgType" value="C"/>
+            <field name="164" value="11"/>
+            <field name="94" value="0"/>
+            <field name="147" value="[NOTE] TROIOI:BLP Established"/>
+            <group name="LinesOfText">
+                <field name="58" value="N"/>
+            </group>
+            <group name="LinesOfText">
+                <field name="58" value="1"/>
+            </group>
+            <group name="LinesOfText">
+                <field name="58" value="Established"/>
+            </group>
+            <group name="LinesOfText">
+                <field name="58" value="TROIOI:BLP"/>
+            </group>
+            <field name="10" value="152"/>
+        </fixMessage>
+
+        <fixSend refid="main_acceptor">
+            <fixMessage source="C"/>
+        </fixSend>
+
+
+        <smtpReceive timeout="60">
+            <smtpMessage id="msg">
+                <field name="From" value="bbb@localhost"/>
+                <field name="To" value="aaa@localhost"/>
+                <field name="Subject" value="[NOTE] TROIOI:BLP Established"/>
+                <group name="Data">
+                    <field name="1" value="N"/>
+                    <field name="2" value="1"/>
+                </group>
+            </smtpMessage>
+        </smtpReceive>
+    </target>
+
+</project>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

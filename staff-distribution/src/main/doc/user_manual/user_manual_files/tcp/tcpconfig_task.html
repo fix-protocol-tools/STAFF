@@ -1,0 +1,74 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>TcpConfig(deprecated)</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>TcpConfig(deprecated)</h1>
+   <h2>Description</h2>
+   <p>
+    TcpConfig task is intended for TCP transport environment configuration.
+    As long as Ant and all its tasks are implemented in Java language,
+    TCP transport tasks are implemented using jTcpTransport project.
+    This task should be used if you want to specify custom configuration file
+    and/or library name to use. It is recommended to configure TCP transport
+    before executing other task, otherwise the configuration will take no effect.
+   </p>
+   <h2>Parameters</h2>
+   <p>
+    The attributes for TcpConfig are identical to the jTcpTransport configuration properties.
+   </p>
+   <table border="1">
+   <tr>
+    <td><b>Attribute</b></td>
+    <td><b>Description</b></td>
+    <td><b>Default</b></td>
+    <td><b>Required</b></td>
+   </tr>
+   <tr>
+    <td>libraryName</td>
+    <td>Name of the DLL/SO library that should be loaded for transport implementation</td>
+    <td>None</td>
+    <td>No</td>
+   </tr>
+   <tr>
+    <td>configFile</td>
+    <td>Path to the configuration file that contains jTcpTransport configuration</td>
+    <td>None</td>
+    <td>No</td>
+   </tr>
+   </table>
+   <h2>Examples</h2>
+   <pre>
+    &lt;?xml version="1.0" encoding="utf-8"?&gt;
+    &lt;project name="test" default="test"&gt;
+      &lt;taskdef resource="com/btobits/coesfx/automator/antlib.xml"/&gt;
+      &lt;dirname property="test.basedir" file="${ant.file}"/&gt;
+      &lt;target name="test"&gt;
+        &lt;tcpConfig
+          libraryName="jTcpTransport"
+          configFile="${test.basedir}/jTcpTransport.properties" /&gt;
+      &lt;/target&gt;
+     &lt;/project&gt;
+   </pre>
+  </body>
+</html>

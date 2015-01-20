@@ -1,0 +1,59 @@
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+  <head>
+    <title>Timestamp</title>
+	<link href="../stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="verd">
+   <h1>Timestamp</h1>
+   <h2>Description</h2>
+   <p>Timestamp task generates 13 digits ESTTimestamp - count of milliseconds since the epoch (in UTC). The epoch is January 1st of 1970.</p>
+   <h2>Parameters</h2>
+   <table border="1" valign="top">
+    <tr>
+     <td><b>Attribute</b></td>
+     <td><b>Description</b></td>
+     <td><b>Default</b></td>
+     <td><b>Required</b></td>
+    </tr>
+    <tr>
+     <td>outputproperty</td>
+     <td>The property to receive the timestamp string. </td>
+     <td>None</td>
+     <td>Yes</td>
+    </tr>
+   </table>
+<p>Timestamp task can be used to generate unique identifier or TransactTime value for the ITCH messages. In order to receive the value with some offset (posisitve or negative) use <a href="http://ant-contrib.sourceforge.net/tasks/tasks/math_task.html">Math</a> Ant task. See example below.</p>
+<p>In order to receive date / time value in other forat use <a href="http://ant.apache.org/manual/Tasks/tstamp.html">Tstamp</a> Ant task. See example below.</p>
+<h2>Examples</h2>
+<p>Set TransactTime property value to the current EST Timestamp. Then calculate ExpireTime = TransactTime + 5 hours.</p>
+<pre>
+	&lt;java classname="Timestamp" outputproperty="TransactTime" fork="false" /&gt;
+	&lt;math result="ExpireTime" operation="+" operand1="${TransactTime}" operand2="18000000" datatype="long"/&gt;
+</pre>
+<p>Set TransactTime property value to the current GMT Time plus 5 hours..</p>
+<pre>
+	&lt;tstamp&gt;
+      		&lt;format property="TransactTime" pattern="yyyyMMdd-HH:mm:ss.SSS" timezone="GMT" unit="hour" offset="5"/&gt;
+	&lt;/tstamp&gt;
+</pre>
+</body>
+</html>

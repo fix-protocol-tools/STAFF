@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright © 2011-2014 EPAM Systems/B2BITS® (http://www.b2bits.com).
+  ~
+  ~ This file is part of STAFF.
+  ~
+  ~ STAFF is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ STAFF is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with STAFF. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<project name="fix_filter_fix" default="all">
+    <dirname property="base.dir" file="${ant.file}"/>
+    <import file="${base.dir}/fix_common.xml"/>
+
+    <!-- ================================================= -->
+    <target name="all" depends="clean, init, test, stop">
+    </target>
+    <!-- ================================================= -->
+
+    <target name="init">
+        <mkdir dir="${test.log.dir}"/>
+        <echo>Creating FIX Initiator...</echo>
+        <fixInitiator settingsfile="./settings/FIXInitiator.properties" id="main_initiator"/>
+
+        <echo>Creating FIX Aceptor...</echo>
+        <fixAcceptor settingsfile="./settings/FIXAcceptor.properties" id="main_acceptor"/>
+
+        <echo>Creating INITIATOR filters...</echo>
+        <!-- fix message object will income to filter -->
+        <fixFilterFixIn refid="main_initiator" id="ini_fix_in"/>
+        <!-- fix message object will income to filter -->
+        <fixFilterFixOut refid="main_initiator" id="ini_fix_out"/>
+
+        <echo>Creating ACCEPTOR filters...</echo>
+        <!-- fix message object will income to filter -->
+        <fixFilterFixIn refid="main_acceptor" id="acc_fix_in"/>
+        <!-- fix message object will income to filter -->
+        <fixFilterFixOut refid="main_acceptor" id="acc_fix_out"/>
+
+        <echo>Starting Initiator &amp; Acceptor...</echo>
+        <fixStart refid="main_initiator"/>
+        <fixStart refid="main_acceptor"/>
+        <echo>Waiting for initiator to establish connection...</echo>
+        <fixWaitForLogin refid="main_initiator" timeout="30"/>
+    </target>
+    <!-- ================================================= -->
+
+    <target name="stop">
+        <echo>Stopping FIX Initiator...</echo>
+        <fixStop refid="main_initiator"/>
+        <sleep seconds="1"/>
+        <echo>Stopping FIX Acceptor...</echo>
+        <fixStop refid="main_acceptor"/>
+        <sleep seconds="1"/>
+    </target>
+    <!-- ================================================= -->
+
+    <target name="test">
+        <tstamp>
+            <format property="new_order_trn_time" pattern="yyyyMMdd-hh:mm:ss.SSS" locale="en,US" offset="-5"
+                    unit="hour"/>
+        </tstamp>
+
+        <echo>Creating New Order Single request...</echo>
+        <fixMessage id="new_order_single_1">
+            <field name="MsgType" value="D"/>
+            <field name="HandlInst" value="1"/>
+            <field name="Symbol" value="ZXZZT"/>
+            <field name="Side" value="1"/>
+            <field name="OrderQty" value="20000"/>
+            <field name="OrdType" value="2"/>
+            <field name="ClOrdID" value="Order#1"/>
+            <field name="Price" value="34.7"/>
+            <field name="TransactTime" value="${new_order_trn_time}"/>
+        </fixMessage>
+
+        <echo>Creating New Order Single request...</echo>
+        <fixMessage id="new_order_single_2">
+            <field name="MsgType" value="D"/>
+            <field name="HandlInst" value="1"/>
+            <field name="Symbol" value="ZXZZT"/>
+            <field name="Side" value="1"/>
+            <field name="OrderQty" value="150"/>
+            <field name="OrdType" value="2"/>
+            <field name="ClOrdID" value="Order#2"/>
+            <field name="Price" value="34.7"/>
+            <field name="TransactTime" value="${new_order_trn_time}"/>
+        </fixMessage>
+
+        <echo>Generating transact time...</echo>
+        <echo>Transact time is ${new_order_trn_time}</echo>
+        <fixField refid="new_order_single_1" action="set" name="TransactTime" property="new_order_trn_time"/>
+
+        <fixField refid="new_order_single_2" action="set" name="TransactTime" property="new_order_trn_time"/>
+
+        <echo>Creating filter out rule for initiator...</echo>
+        <fixFilterRule refid="ini_fix_out" active="true">
+            <fixFilterMatchField tag="8" value="FIX*" condition="regexp"/>
+            <fixFilterMatchField tag="35" value="D" condition="equals" req="true"/>
+            <fixFilterMatchCounter from="0" to="1"/>
+            <fixFilterAction operation="insertAfter">
+                <fixMessage source="new_order_single_2"/>
+            </fixFilterAction>
+        </fixFilterRule>
+
+        <echo>Sending New Order Single requests</echo>
+        <fixSend refid="main_initiator">
+            <fixMessage source="new_order_single_1"/>
+        </fixSend>
+
+        <echo>Waiting for New Order Single messages to be received...</echo>
+        <fixReceive refid="main_acceptor" timeout="10">
+            <fixMessage source="new_order_single_1"/>
+            <fixMessage source="new_order_single_2"/>
+        </fixReceive>
+    </target>
+
+</project>
