@@ -31,8 +31,6 @@
         <ant.version>1.8.4</ant.version>
         <junit.version>4.8.1</junit.version>
         <main.basedir>${project.basedir}</main.basedir>
-        <tagBase>https://svnsaratov.epam.com/epm-bfix/tags/java/Staff</tagBase>
-        <distribution.url>\\EPUAKYISA0001.kyiv.epam.com\Projects\EPM-BFIX\Files\Staff\Releases</distribution.url>
         <brandingToken>Staff</brandingToken>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -46,9 +44,6 @@
         <url>http://b2bits.com</url>
     </organization>
     <scm>
-        <connection>scm:svn:https://svnsaratov.epam.com/epm-bfix/trunk/java/Staff_3_0_opensource</connection>
-        <developerConnection>scm:svn:https://svnsaratov.epam.com/epm-bfix/trunk/java/Staff_3_0_opensource</developerConnection>
-        <url>https://svnsaratov.epam.com/epm-bfix/trunk/java/Staff_3_0_opensource</url>
     </scm>
 
     <modules>
@@ -63,11 +58,9 @@
     <distributionManagement>
         <repository>
             <id>releases</id>
-            <url>http://evuakyisd0078.kyiv.epam.com:8081/nexus/content/repositories/releases</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
-            <url>http://evuakyisd0078.kyiv.epam.com:8081/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
     <dependencies>
