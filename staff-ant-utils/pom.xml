@@ -35,9 +35,6 @@
     </description>
 
     <scm>
-        <connection>scm:svn:https://svnsaratov.epam.com/epm-bfix/trunk/java/Staff_3_0_opensource/staff-ant-utils</connection>
-        <developerConnection>scm:svn:https://svnsaratov.epam.com/epm-bfix/trunk/java/Staff_3_0_opensource/staff-ant-utils</developerConnection>
-        <url>https://svnsaratov.epam.com/epm-bfix/trunk/java/Staff_3_0_opensource/staff-ant-utils</url>
     </scm>
 
        <!--<properties>-->

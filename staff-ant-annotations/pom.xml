@@ -39,9 +39,6 @@
     <!--</properties>-->
 
     <scm>
-        <connection>scm:svn:https://svnsaratov.epam.com/epm-bfix/trunk/java/Staff_3_0_opensource/staff-ant-annotations</connection>
-        <developerConnection>scm:svn:https://svnsaratov.epam.com/epm-bfix/trunk/java/Staff_3_0_opensource/staff-ant-annotations</developerConnection>
-        <url>https://svnsaratov.epam.com/epm-bfix/trunk/java/Staff_3_0_opensource/staff-ant-annotations</url>
     </scm>
 
     <build>

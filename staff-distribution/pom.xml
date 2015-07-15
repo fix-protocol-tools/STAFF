@@ -43,9 +43,6 @@
     </properties>
 
     <scm>
-        <connection>scm:svn:https://svnsaratov.epam.com/epm-bfix/trunk/Staff_3_0/staff-distribution</connection>
-        <developerConnection>scm:svn:https://svnsaratov.epam.com/epm-bfix/trunk/Staff_3_0/staff-distribution</developerConnection>
-        <url>https://svnsaratov.epam.com/epm-bfix/trunk/Staff_3_0/staff-distribution</url>
     </scm>
 
     <dependencies>

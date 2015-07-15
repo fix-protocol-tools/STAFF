@@ -39,9 +39,6 @@
     <!--</properties>-->
 
     <scm>
-        <connection>scm:svn:https://svnsaratov.epam.com/epm-bfix/trunk/java/Staff_3_0_opensource/staff-mail</connection>
-        <developerConnection>scm:svn:https://svnsaratov.epam.com/epm-bfix/trunk/java/Staff_3_0_opensource/staff-mail</developerConnection>
-        <url>https://svnsaratov.epam.com/epm-bfix/trunk/java/Staff_3_0_opensource/staff-mail</url>
     </scm>
     <repositories>
         <repository>

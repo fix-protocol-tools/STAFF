@@ -40,9 +40,6 @@
     <!--</properties>-->
 
     <scm>
-        <connection>scm:svn:https://svnsaratov.epam.com/epm-bfix/trunk/Staff_3_0/staff-core</connection>
-        <developerConnection>scm:svn:https://svnsaratov.epam.com/epm-bfix/trunk/java/Staff_3_0_opensource/staff-core</developerConnection>
-        <url>https://svnsaratov.epam.com/epm-bfix/trunk/java/Staff_3_0_opensource/staff-core</url>
     </scm>
 
     <repositories>
