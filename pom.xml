@@ -55,14 +55,6 @@
         <module>staff-ant-utils</module>
         <module>staff-distribution</module>
     </modules>
-    <distributionManagement>
-        <repository>
-            <id>releases</id>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-        </snapshotRepository>
-    </distributionManagement>
     <dependencies>
         <dependency>
             <groupId>org.apache.ant</groupId>
