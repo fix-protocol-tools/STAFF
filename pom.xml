@@ -29,7 +29,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <ant.version>1.10.9</ant.version>
-        <junit.version>4.8.1</junit.version>
+        <junit.version>4.13.1</junit.version>
         <main.basedir>${project.basedir}</main.basedir>
         <brandingToken>Staff</brandingToken>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
